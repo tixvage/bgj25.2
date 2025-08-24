@@ -3,15 +3,19 @@ extends CharacterBody2D
 @export var player_datas: Array[PlayerData]
 
 @onready var camera: Camera2D = %Camera2D
+@onready var sprite: Sprite2D = $Sprite2D
 @onready var dash_ray: RayCast2D = $DashRay
+@onready var ghost_spawn_timer: Timer = $GhostSpawnTimer
+
+@onready var player_ghost_scene := preload("res://scenes/player_ghost.tscn")
 
 var is_dashing: bool = false
 var dash_distance: float = 0.0
 var current_data: int = 0
 
-const DASH_FORCE: float = 60.0
+const DASH_FORCE: float = 90.0
 const DASH_LIMIT: float = 150.0
-const SHAKE_FORCE: float = 2
+const SHAKE_FORCE: float = 1
 
 func _ready() -> void:
 	Global.camera_manager.camera = camera
@@ -31,6 +35,8 @@ func _physics_process(delta: float) -> void:
 		if can_dash:
 			is_dashing = true
 			dash_distance = position.y
+			ghost_spawn_timer.one_shot = false
+			ghost_spawn_timer.start()
 			if velocity.y < 0.0:
 				velocity.y = DASH_FORCE * data.mass
 			else:
@@ -39,6 +45,7 @@ func _physics_process(delta: float) -> void:
 	if is_on_floor() and is_dashing:
 		is_dashing = false
 		dash_distance = position.y - dash_distance
+		ghost_spawn_timer.one_shot = true
 		var dash_power: float = 1.0 + min(1.0, dash_distance / (dash_ray.target_position.y * 2.0))
 		dash_distance = 0.0
 		Global.camera_manager.shake(SHAKE_FORCE * data.mass * dash_power, 5)
@@ -53,3 +60,10 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, data.move_speed)
 
 	move_and_slide()
+
+
+func _on_ghost_spawn_timer_timeout() -> void:
+	var ghost_instance = player_ghost_scene.instantiate()
+	ghost_instance.apply_sprite(sprite, position)
+	print("hellow")
+	get_parent().add_child(ghost_instance)

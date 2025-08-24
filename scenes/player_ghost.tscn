@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://k6258rj75ijs"]
+
+[ext_resource type="Texture2D" uid="uid://bpytj5wkia55y" path="res://icon.svg" id="1_32khj"]
+[ext_resource type="Script" uid="uid://byvxo5qhr7qsh" path="res://scripts/player_ghost.gd" id="1_hmsbg"]
+
+[node name="PlayerGhost" type="Sprite2D"]
+texture = ExtResource("1_32khj")
+script = ExtResource("1_hmsbg")

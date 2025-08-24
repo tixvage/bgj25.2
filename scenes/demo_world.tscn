@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=4 uid="uid://d28ywxaxhy6xu"]
+[gd_scene load_steps=10 format=4 uid="uid://d28ywxaxhy6xu"]
 
 [ext_resource type="Texture2D" uid="uid://by3ptq44r5ugy" path="res://assets/sprite/partment_progression.png" id="1_25m8j"]
 [ext_resource type="Script" uid="uid://koo0xud6sagg" path="res://scripts/player.gd" id="1_hym41"]
 [ext_resource type="Script" uid="uid://bfj6hq6gj25hm" path="res://scripts/player_data.gd" id="2_70cc3"]
 [ext_resource type="Script" uid="uid://beq2ccoyulos6" path="res://scripts/camera.gd" id="4_tccpi"]
+[ext_resource type="Texture2D" uid="uid://b4b6hife0b6b7" path="res://assets/sprite/butlermitani.png" id="4_tdn6g"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tccpi"]
 texture = ExtResource("1_25m8j")
@@ -82,14 +83,14 @@ sources/0 = SubResource("TileSetAtlasSource_tccpi")
 
 [sub_resource type="Resource" id="Resource_25m8j"]
 script = ExtResource("2_70cc3")
-move_speed = 500.0
+move_speed = 300.0
 jump_force = 700.0
 damage_amount = 10.0
 mass = 10.0
 metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4hlwr"]
-size = Vector2(48, 48)
+size = Vector2(16, 28)
 
 [node name="DemoWorld" type="Node2D"]
 
@@ -102,10 +103,14 @@ position = Vector2(336, 200)
 script = ExtResource("1_hym41")
 player_datas = Array[ExtResource("2_70cc3")]([SubResource("Resource_25m8j")])
 
-[node name="Polygon2D" type="Polygon2D" parent="Player"]
-polygon = PackedVector2Array(-24, -24, -24, 24, 24, 24, 24, -24)
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+texture = ExtResource("4_tdn6g")
+hframes = 2
+vframes = 6
+frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(-3, 0)
 shape = SubResource("RectangleShape2D_4hlwr")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -119,3 +124,8 @@ script = ExtResource("4_tccpi")
 
 [node name="DashRay" type="RayCast2D" parent="Player"]
 target_position = Vector2(0, 150)
+
+[node name="GhostSpawnTimer" type="Timer" parent="Player"]
+wait_time = 0.02
+
+[connection signal="timeout" from="Player/GhostSpawnTimer" to="Player" method="_on_ghost_spawn_timer_timeout"]
