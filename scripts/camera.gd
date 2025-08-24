@@ -1,4 +1,4 @@
-extends Node2D
+extends Camera2D
 
 
 # Called when the node enters the scene tree for the first time.
@@ -8,5 +8,4 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("interact"):
-		Global.audio_manager.create_2d_audio_at_location(position, SoundEffect.Type.NONE)
+	pass

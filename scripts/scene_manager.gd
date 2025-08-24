@@ -8,7 +8,7 @@ var current_gui_scene: Node2D = null
 
 func _ready() -> void:
 	Global.scene_manager = self
-	change_world_2d_scene("res://scenes/world.tscn")
+	change_world_2d_scene("res://scenes/demo_world.tscn")
 
 
 func change_gui_scene(scene_name: String, delete: bool = true, keep_running: bool = false) -> void:
