@@ -1,0 +1,117 @@
+[gd_scene load_steps=5 format=3 uid="uid://ctigdyavfq3in"]
+
+[ext_resource type="Script" uid="uid://dluxfs1bdps1o" path="res://scripts/text_box.gd" id="1_ghj5q"]
+[ext_resource type="FontFile" uid="uid://dtc8ex0q54sne" path="res://assets/font/Born2bSportyV10.ttf" id="3_mx0kw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k0juu"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7r4gi"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[node name="DialogueLayer" type="CanvasLayer"]
+
+[node name="DialogueBox" type="MarginContainer" parent="." groups=["text_manager"]]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 40.0
+offset_top = 5.0
+offset_right = -40.0
+offset_bottom = 85.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+script = ExtResource("1_ghj5q")
+
+[node name="Panel" type="Panel" parent="DialogueBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_k0juu")
+
+[node name="MarginContainer" type="MarginContainer" parent="DialogueBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DialogueBox/MarginContainer"]
+layout_mode = 2
+
+[node name="Texture" type="TextureRect" parent="DialogueBox/MarginContainer/HBoxContainer"]
+z_index = 100
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+stretch_mode = 4
+
+[node name="Panel" type="Panel" parent="DialogueBox/MarginContainer/HBoxContainer/Texture"]
+z_index = 50
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7r4gi")
+
+[node name="Start" type="RichTextLabel" parent="DialogueBox/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("3_mx0kw")
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "*"
+fit_content = true
+
+[node name="Text" type="RichTextLabel" parent="DialogueBox/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_shadow_color = Color(0.666667, 0.666667, 0.666667, 1)
+theme_override_fonts/normal_font = ExtResource("3_mx0kw")
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "[color=white]Demo message[/color]:
+"
+fit_content = true
+
+[node name="End" type="RichTextLabel" parent="DialogueBox/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_fonts/normal_font = ExtResource("3_mx0kw")
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = ">"
+fit_content = true
