@@ -1,10 +1,12 @@
-[gd_scene load_steps=10 format=4 uid="uid://d28ywxaxhy6xu"]
+[gd_scene load_steps=15 format=4 uid="uid://d28ywxaxhy6xu"]
 
 [ext_resource type="Texture2D" uid="uid://by3ptq44r5ugy" path="res://assets/sprite/partment_progression.png" id="1_25m8j"]
 [ext_resource type="Script" uid="uid://koo0xud6sagg" path="res://scripts/player.gd" id="1_hym41"]
 [ext_resource type="Script" uid="uid://bfj6hq6gj25hm" path="res://scripts/player_data.gd" id="2_70cc3"]
 [ext_resource type="Script" uid="uid://beq2ccoyulos6" path="res://scripts/camera.gd" id="4_tccpi"]
 [ext_resource type="Texture2D" uid="uid://b4b6hife0b6b7" path="res://assets/sprite/butlermitani.png" id="4_tdn6g"]
+[ext_resource type="Script" uid="uid://cgs4vdxquu2oq" path="res://scripts/enemy.gd" id="6_1464v"]
+[ext_resource type="Texture2D" uid="uid://b1g1yytw1fwip" path="res://assets/sprite/chefmitani.png" id="6_da435"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tccpi"]
 texture = ExtResource("1_25m8j")
@@ -87,10 +89,19 @@ move_speed = 300.0
 jump_force = 700.0
 damage_amount = 10.0
 mass = 10.0
+damage_area = Vector2(120, 20)
 metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4hlwr"]
 size = Vector2(16, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tdn6g"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1464v"]
+size = Vector2(19, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_da435"]
+size = Vector2(19, 32)
 
 [node name="DemoWorld" type="Node2D"]
 
@@ -100,18 +111,28 @@ tile_set = SubResource("TileSet_tdn6g")
 
 [node name="Player" type="CharacterBody2D" parent="."]
 position = Vector2(336, 200)
+collision_layer = 2
 script = ExtResource("1_hym41")
 player_datas = Array[ExtResource("2_70cc3")]([SubResource("Resource_25m8j")])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(-3, 0)
+shape = SubResource("RectangleShape2D_4hlwr")
+
+[node name="DashDamageArea" type="Area2D" parent="Player"]
+position = Vector2(-2, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/DashDamageArea"]
+shape = SubResource("RectangleShape2D_tdn6g")
+
+[node name="DashRay" type="RayCast2D" parent="Player"]
+target_position = Vector2(0, 150)
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 texture = ExtResource("4_tdn6g")
 hframes = 2
 vframes = 6
 frame = 1
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-position = Vector2(-3, 0)
-shape = SubResource("RectangleShape2D_4hlwr")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 unique_name_in_owner = true
@@ -122,10 +143,26 @@ editor_draw_limits = true
 editor_draw_drag_margin = true
 script = ExtResource("4_tccpi")
 
-[node name="DashRay" type="RayCast2D" parent="Player"]
-target_position = Vector2(0, 150)
-
 [node name="GhostSpawnTimer" type="Timer" parent="Player"]
 wait_time = 0.02
+
+[node name="Enemy" type="CharacterBody2D" parent="."]
+position = Vector2(219, 559)
+collision_layer = 4
+script = ExtResource("6_1464v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy"]
+shape = SubResource("RectangleShape2D_1464v")
+
+[node name="DashHurtArea" type="Area2D" parent="Enemy" groups=["EnemyDash"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy/DashHurtArea"]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_da435")
+
+[node name="Sprite2D" type="Sprite2D" parent="Enemy"]
+texture = ExtResource("6_da435")
+hframes = 4
+vframes = 4
 
 [connection signal="timeout" from="Player/GhostSpawnTimer" to="Player" method="_on_ghost_spawn_timer_timeout"]

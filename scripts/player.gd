@@ -14,6 +14,8 @@ const SHAKE_FORCE: float = 1.0
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var dash_ray: RayCast2D = $DashRay
 @onready var ghost_spawn_timer: Timer = $GhostSpawnTimer
+@onready var dash_damage_area: Area2D = $DashDamageArea
+@onready var dash_damage_collision: CollisionShape2D = $DashDamageArea/CollisionShape2D
 
 @onready var player_ghost_scene := preload("res://scenes/player_ghost.tscn")
 
@@ -22,16 +24,49 @@ var is_dashing: bool = false
 var dash_distance: float = 0.0
 var coyote_timer: float = 0.0
 
+var data: PlayerData : get = get_current_data 
+
 func _ready() -> void:
+	change_data(0)
 	Global.camera_manager.camera = camera
+
+
+func change_data(new_data: int) -> void:
+	current_data = new_data
+	dash_damage_collision.shape.size = data.damage_area
 
 
 func get_current_data() -> PlayerData:
 	return player_datas[current_data]
 
-func _physics_process(delta: float) -> void:
-	var data := get_current_data()
+func start_dash() -> void:
+	is_dashing = true
+	dash_distance = position.y
+	ghost_spawn_timer.one_shot = false
+	ghost_spawn_timer.start()
 
+	if velocity.y < 0.0:
+		velocity.y = DASH_FORCE * data.mass
+	else:
+		velocity.y += DASH_FORCE * data.mass
+
+
+func stop_dash() -> void:
+	is_dashing = false
+	dash_distance = position.y - dash_distance
+	ghost_spawn_timer.one_shot = true
+	var dash_power: float = 1.0 + min(1.0, dash_distance / (dash_ray.target_position.y * 2.0))
+	dash_distance = 0.0
+
+	Global.camera_manager.shake(SHAKE_FORCE * data.mass * dash_power, 5)
+	var bodies := dash_damage_area.get_overlapping_areas()
+	for body in bodies:
+		if body.is_in_group("EnemyDash"):
+			var distance: float = absf(position.x - body.global_position.x)
+			var nearness: float = max(0, 1.0 - (distance / (data.damage_area.x / 2.0)))
+			print(nearness)
+
+func _physics_process(delta: float) -> void:
 	var on_floor := is_on_floor()
 	var can_jump: bool = coyote_timer > 0.0
 	if on_floor:
@@ -46,22 +81,10 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 
 	if Input.is_action_just_pressed("move_down") and can_dash:
-		is_dashing = true
-		dash_distance = position.y
-		ghost_spawn_timer.one_shot = false
-		ghost_spawn_timer.start()
-		if velocity.y < 0.0:
-			velocity.y = DASH_FORCE * data.mass
-		else:
-			velocity.y += DASH_FORCE * data.mass
+		start_dash()
 
 	if on_floor and is_dashing:
-		is_dashing = false
-		dash_distance = position.y - dash_distance
-		ghost_spawn_timer.one_shot = true
-		var dash_power: float = 1.0 + min(1.0, dash_distance / (dash_ray.target_position.y * 2.0))
-		dash_distance = 0.0
-		Global.camera_manager.shake(SHAKE_FORCE * data.mass * dash_power, 5)
+		stop_dash()
 
 	if Input.is_action_just_pressed("move_up") and can_jump:
 		velocity.y = -data.jump_force

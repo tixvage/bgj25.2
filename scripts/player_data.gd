@@ -5,3 +5,4 @@ class_name PlayerData
 @export var jump_force: float
 @export var damage_amount: float
 @export var mass: float
+@export var damage_area: Vector2
