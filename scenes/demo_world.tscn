@@ -116,3 +116,6 @@ drag_vertical_enabled = true
 editor_draw_limits = true
 editor_draw_drag_margin = true
 script = ExtResource("4_tccpi")
+
+[node name="DashRay" type="RayCast2D" parent="Player"]
+target_position = Vector2(0, 150)
