@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3 uid="uid://c8q2wjwagov8h"]
+
+[ext_resource type="Script" uid="uid://cil73ed5tu74" path="res://scripts/scene_manager.gd" id="1_o5qli"]
+[ext_resource type="Script" uid="uid://dy8vpfa4appfu" path="res://scripts/audio_manager.gd" id="2_0wfyh"]
+[ext_resource type="Script" uid="uid://d5tjmlelqgaf" path="res://scripts/sound_effect.gd" id="3_sugp2"]
+[ext_resource type="AudioStream" uid="uid://cgia20r1t8n72" path="res://assets/sound/none.mp3" id="4_jyhfs"]
+[ext_resource type="Script" uid="uid://dr36lipt4c0a8" path="res://scripts/window_manager.gd" id="5_tbgi4"]
+
+[sub_resource type="Resource" id="Resource_jyhfs"]
+script = ExtResource("3_sugp2")
+limit = 5
+type = 0
+sound_effect = ExtResource("4_jyhfs")
+volume = 0
+pitch_scale = 1.0
+pitch_randomness = 0.0
+metadata/_custom_type_script = "uid://d5tjmlelqgaf"
+
+[node name="Main" type="Node"]
+
+[node name="World2D" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="GUI" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SceneManager" type="Node" parent="."]
+script = ExtResource("1_o5qli")
+
+[node name="AudioManager" type="Node" parent="."]
+script = ExtResource("2_0wfyh")
+sound_effects = Array[ExtResource("3_sugp2")]([SubResource("Resource_jyhfs")])
+
+[node name="WindowManager" type="Node" parent="."]
+script = ExtResource("5_tbgi4")
