@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c8q2wjwagov8h"]
+[gd_scene load_steps=10 format=3 uid="uid://c8q2wjwagov8h"]
 
 [ext_resource type="Script" uid="uid://cil73ed5tu74" path="res://scripts/scene_manager.gd" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://dy8vpfa4appfu" path="res://scripts/audio_manager.gd" id="2_0wfyh"]
@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://cgia20r1t8n72" path="res://assets/sound/none.mp3" id="4_jyhfs"]
 [ext_resource type="Script" uid="uid://dr36lipt4c0a8" path="res://scripts/window_manager.gd" id="5_tbgi4"]
 [ext_resource type="Script" uid="uid://fakgyt1igiiy" path="res://scripts/camera_manager.gd" id="6_tefeu"]
+[ext_resource type="Shader" uid="uid://dmt0xf6ywpk70" path="res://shaders/subpixel.gdshader" id="7_o6xl0"]
 
 [sub_resource type="Resource" id="Resource_jyhfs"]
 script = ExtResource("3_sugp2")
@@ -16,6 +17,10 @@ volume = 0
 pitch_scale = 1.0
 pitch_randomness = 0.0
 metadata/_custom_type_script = "uid://d5tjmlelqgaf"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tipki"]
+shader = ExtResource("7_o6xl0")
+shader_parameter/cam_offset = Vector2(0, 0)
 
 [node name="Main" type="Node"]
 
@@ -32,12 +37,28 @@ script = ExtResource("5_tbgi4")
 [node name="CameraManager" type="Node" parent="."]
 script = ExtResource("6_tefeu")
 
-[node name="World2D" type="Node2D" parent="."]
-unique_name_in_owner = true
-
 [node name="GUI" type="Control" parent="."]
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+unique_name_in_owner = true
+texture_filter = 1
+texture_repeat = 1
+material = SubResource("ShaderMaterial_tipki")
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 478.0
+offset_bottom = 268.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(482, 272)
+render_target_update_mode = 4
+
+[node name="World2D" type="Node2D" parent="SubViewportContainer/SubViewport"]
+unique_name_in_owner = true
+texture_filter = 1

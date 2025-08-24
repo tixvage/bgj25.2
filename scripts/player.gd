@@ -9,6 +9,9 @@ extends CharacterBody2D
 const DASH_FORCE: float = 90.0
 const DASH_LIMIT: float = 150.0
 const SHAKE_FORCE: float = 1.0
+const ENEMY_KNOCKBACK_FORCE_X: float = 10.0
+const ENEMY_KNOCKBACK_FORCE_Y: float = -30.0
+const ENEMY_KNOCKBACK_TIME: float = 0.7
 
 @onready var camera: Camera2D = %Camera2D
 @onready var sprite: Sprite2D = $Sprite2D
@@ -63,8 +66,16 @@ func stop_dash() -> void:
 	for body in bodies:
 		if body.is_in_group("EnemyDash"):
 			var distance: float = absf(position.x - body.global_position.x)
-			var nearness: float = max(0, 1.0 - (distance / (data.damage_area.x / 2.0)))
-			print(nearness)
+			var nearness: float = max(0.0, 1.0 - (distance / (data.damage_area.x / 2.0))) + 0.5
+			if nearness != 0.5:
+				var raw_nearness: float = nearness if position.x < body.global_position.x else -nearness
+				body.get_parent().apply_knockback(
+					ENEMY_KNOCKBACK_TIME * nearness * Global.rng.randf_range(0.8, 1.2),
+					Vector2(
+						raw_nearness * data.mass * ENEMY_KNOCKBACK_FORCE_X * Global.rng.randf_range(0.8, 1.2),
+						nearness * data.mass * ENEMY_KNOCKBACK_FORCE_Y * Global.rng.randf_range(0.8, 1.2),
+					)
+				)
 
 func _physics_process(delta: float) -> void:
 	var on_floor := is_on_floor()

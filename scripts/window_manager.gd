@@ -2,6 +2,7 @@ class_name WindowManager extends Node
 
 func _ready() -> void:
 	Global.window_manager = self
+	Global.world_viewport = %SubViewportContainer
 
 func _input(event: InputEvent) -> void:
 	return
