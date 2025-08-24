@@ -8,7 +8,7 @@ var is_dashing: bool = false
 var current_data: int = 0
 
 const DASH_FORCE: float = 60.0
-
+const SHAKE_FORCE: float = 2
 
 func _ready() -> void:
 	print(camera)
@@ -32,13 +32,13 @@ func _physics_process(delta: float) -> void:
 			velocity.y += DASH_FORCE * data.mass
 
 	if is_on_floor() and is_dashing:
-		Global.camera_manager.shake(20, 5)
+		Global.camera_manager.shake(SHAKE_FORCE * data.mass, 5)
 		is_dashing = false
 
 	if Input.is_action_just_pressed("move_up") and is_on_floor():
 		velocity.y = -data.jump_force
 
-	var direction := Input.get_axis("move_left", "move_right")
+	var direction := Input.get_axis("move_left", "move_right") if not is_dashing else 0.0
 	if direction:
 		velocity.x = direction * data.move_speed
 	else:
