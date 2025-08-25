@@ -4,6 +4,7 @@ extends CharacterBody2D
 
 enum State {
 	RANDOM,
+	KNOCKBACK,
 }
 
 const MAX_HEALTH: float = 100.0
@@ -19,8 +20,9 @@ var knockback_timer: float = 0.0
 var health: float = MAX_HEALTH
 
 @onready var flash_timer: Timer = $FlashTimer
-@onready var sprite: Sprite2D = $Sprite2D
-
+@onready var sprite: Sprite2D = $Root/Sprite2D
+@onready var direction_ray: RayCast2D = $Root/DirectionRay
+@onready var root: Node2D = $Root
 
 func change_state(new_state: State) -> void:
 	state = new_state
@@ -56,6 +58,7 @@ func damage_from_up(raw_nearness: float, mass: float) -> void:
 	)
 	var damage_amount: float = mass * nearness * 2
 	damage(damage_amount)
+	change_state(State.KNOCKBACK)
 
 
 func apply_knockback(time: float, force: Vector2) -> void:
@@ -65,21 +68,25 @@ func apply_knockback(time: float, force: Vector2) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	root.scale.x = 1 if current_target_x - global_position.x > 0 else -1
+
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
 	if state == State.RANDOM:
 		if abs(global_position.x - current_target_x) < Global.EPS:
 			change_state(State.RANDOM)
-
-	if knockback_timer > 0.0:
-		knockback_timer -= delta
-		velocity.x = knockback.x
-		if knockback_timer <= 0.0:
-			knockback.x = 0.0
-	else:
 		velocity.x = global_position.direction_to(Vector2(current_target_x, global_position.y)).x * 200.0
-		#velocity.x = move_toward(velocity.x, 0, delta * accel)
+		if direction_ray.is_colliding() and is_on_floor():
+			velocity.y = -300
+	elif state == State.KNOCKBACK:
+		if knockback_timer > 0.0:
+			knockback_timer -= delta
+			velocity.x = knockback.x
+			if knockback_timer <= 0.0:
+				knockback.x = 0.0
+				change_state(State.RANDOM)
+
 	move_and_slide()
 
 

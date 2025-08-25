@@ -114,7 +114,7 @@ tile_set = SubResource("TileSet_tdn6g")
 position = Vector2(39, 516)
 
 [node name="2" type="Marker2D" parent="EnemySpawnPoints/NONE"]
-position = Vector2(417, 522)
+position = Vector2(531, 431)
 
 [node name="EnemySpawner" type="Node2D" parent="." node_paths=PackedStringArray("pool", "spawn_points")]
 script = ExtResource("2_4qpdp")
