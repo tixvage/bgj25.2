@@ -79,7 +79,7 @@ func stop_dash() -> void:
 
 func _physics_process(delta: float) -> void:
 	var on_floor := is_on_floor()
-	var can_jump: bool = coyote_timer > 0.0
+	var can_jump: bool = coyote_timer > 0.0 and velocity.y >= 0
 	if on_floor:
 		coyote_timer = coyote_time
 	else:
