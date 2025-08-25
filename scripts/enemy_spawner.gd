@@ -15,7 +15,6 @@ var random_spawn_timer: float = 0.0
 
 
 func get_random_spawn_position_type(type: Type) -> Vector2:
-	print(Type.keys()[type])
 	var children = spawn_points.get_node(Type.keys()[type]).get_children()
 	return children[Global.rng.randi_range(0, len(children) - 1)].global_position
 
