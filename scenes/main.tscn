@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c8q2wjwagov8h"]
+[gd_scene load_steps=13 format=3 uid="uid://c8q2wjwagov8h"]
 
 [ext_resource type="Script" uid="uid://cil73ed5tu74" path="res://scripts/scene_manager.gd" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://dy8vpfa4appfu" path="res://scripts/audio_manager.gd" id="2_0wfyh"]
@@ -6,8 +6,10 @@
 [ext_resource type="AudioStream" uid="uid://cgia20r1t8n72" path="res://assets/sound/none.mp3" id="4_jyhfs"]
 [ext_resource type="Script" uid="uid://dr36lipt4c0a8" path="res://scripts/window_manager.gd" id="5_tbgi4"]
 [ext_resource type="Script" uid="uid://fakgyt1igiiy" path="res://scripts/camera_manager.gd" id="6_tefeu"]
+[ext_resource type="Script" uid="uid://bwwc54keio8u7" path="res://scripts/enemy_manager.gd" id="7_85g3d"]
 [ext_resource type="Shader" uid="uid://dmt0xf6ywpk70" path="res://shaders/subpixel.gdshader" id="7_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://ctigdyavfq3in" path="res://scenes/dialogue_layer.tscn" id="7_tipki"]
+[ext_resource type="Script" uid="uid://cfab6f6jqnxnv" path="res://scripts/player_manager.gd" id="8_choun"]
 
 [sub_resource type="Resource" id="Resource_jyhfs"]
 script = ExtResource("3_sugp2")
@@ -37,6 +39,14 @@ script = ExtResource("5_tbgi4")
 
 [node name="CameraManager" type="Node" parent="."]
 script = ExtResource("6_tefeu")
+
+[node name="EnemyManager" type="Node" parent="."]
+script = ExtResource("7_85g3d")
+world_limit_min = -100.0
+world_limit_max = 1000.0
+
+[node name="PlayerManager" type="Node" parent="."]
+script = ExtResource("8_choun")
 
 [node name="GUI" type="Control" parent="."]
 unique_name_in_owner = true

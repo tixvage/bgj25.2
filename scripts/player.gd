@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name Player
 
 @export var player_datas: Array[PlayerData]
 
@@ -13,7 +14,6 @@ const ENEMY_KNOCKBACK_FORCE_X: float = 10.0
 const ENEMY_KNOCKBACK_FORCE_Y: float = -30.0
 const ENEMY_KNOCKBACK_TIME: float = 0.7
 
-@onready var camera: Camera2D = %Camera2D
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var dash_ray: RayCast2D = $DashRay
 @onready var ghost_spawn_timer: Timer = $GhostSpawnTimer
@@ -30,8 +30,8 @@ var coyote_timer: float = 0.0
 var data: PlayerData : get = get_current_data 
 
 func _ready() -> void:
+	Global.player_manager.player = self
 	change_data(0)
-	Global.camera_manager.camera = camera
 
 
 func change_data(new_data: int) -> void:
