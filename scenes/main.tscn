@@ -5,11 +5,11 @@
 [ext_resource type="Script" uid="uid://d5tjmlelqgaf" path="res://scripts/sound_effect.gd" id="3_sugp2"]
 [ext_resource type="AudioStream" uid="uid://cgia20r1t8n72" path="res://assets/sound/none.mp3" id="4_jyhfs"]
 [ext_resource type="Script" uid="uid://dr36lipt4c0a8" path="res://scripts/window_manager.gd" id="5_tbgi4"]
-[ext_resource type="Script" uid="uid://fakgyt1igiiy" path="res://scripts/camera_manager.gd" id="6_tefeu"]
-[ext_resource type="Script" uid="uid://bwwc54keio8u7" path="res://scripts/enemy_manager.gd" id="7_85g3d"]
+[ext_resource type="Script" path="res://scripts/camera_manager.gd" id="6_tefeu"]
+[ext_resource type="Script" path="res://scripts/enemy_manager.gd" id="7_85g3d"]
 [ext_resource type="Shader" uid="uid://dmt0xf6ywpk70" path="res://shaders/subpixel.gdshader" id="7_o6xl0"]
-[ext_resource type="PackedScene" uid="uid://ctigdyavfq3in" path="res://scenes/dialogue_layer.tscn" id="7_tipki"]
-[ext_resource type="Script" uid="uid://cfab6f6jqnxnv" path="res://scripts/player_manager.gd" id="8_choun"]
+[ext_resource type="PackedScene" uid="uid://h0ndhqd3d6fy" path="res://scenes/dialogue_layer.tscn" id="7_tipki"]
+[ext_resource type="Script" path="res://scripts/player_manager.gd" id="8_choun"]
 
 [sub_resource type="Resource" id="Resource_jyhfs"]
 script = ExtResource("3_sugp2")

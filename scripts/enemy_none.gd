@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+@export var data: EnemyData
+
 enum State {
 	RANDOM,
 }

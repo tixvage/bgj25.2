@@ -1,7 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://bayt3iiae2ccf"]
+[gd_scene load_steps=7 format=3 uid="uid://bfxyd2q71orbl"]
 
 [ext_resource type="Script" uid="uid://cgs4vdxquu2oq" path="res://scripts/enemy_none.gd" id="1_en8ch"]
+[ext_resource type="Script" uid="uid://cper3rsha37eo" path="res://scripts/enemy_data.gd" id="2_gqwvd"]
 [ext_resource type="Texture2D" uid="uid://b1g1yytw1fwip" path="res://assets/sprite/chefmitani.png" id="2_kar1k"]
+
+[sub_resource type="Resource" id="Resource_d7m88"]
+script = ExtResource("2_gqwvd")
+type = 0
+xp_gain = 0
+metadata/_custom_type_script = "uid://cper3rsha37eo"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1464v"]
 size = Vector2(19, 32)
@@ -12,6 +19,7 @@ size = Vector2(19, 32)
 [node name="EnemyNone" type="CharacterBody2D"]
 collision_layer = 4
 script = ExtResource("1_en8ch")
+data = SubResource("Resource_d7m88")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_1464v")

@@ -6,9 +6,9 @@ enum Type {
 }
 
 @export var pool: Node2D
-@export var enemies: Array[EnemyData]
+@export var enemies: Array[Resource]
 @export var spawn_points: Node2D
-var enemy_dict: Dictionary[Type, EnemyData] = {}
+var enemy_dict: Dictionary[Type, Resource] = {}
 
 var random_spawn_time: float = 2.0
 var random_spawn_timer: float = 0.0
@@ -21,7 +21,7 @@ func get_random_spawn_position_type(type: Type) -> Vector2:
 
 
 func spawn_enemy_type(type: Type) -> void:
-	var enemy_instance = enemy_dict[type].scene.instantiate()
+	var enemy_instance = enemy_dict[type].instantiate()
 	pool.add_child(enemy_instance)
 	enemy_instance.global_position = get_random_spawn_position_type(type)
 
@@ -29,8 +29,9 @@ func _ready() -> void:
 	random_spawn_timer = random_spawn_time
 	Global.enemy_manager.spawner = self
 	for enemy in enemies:
-		enemy_dict[enemy.type] = enemy
-
+		var temp = enemy.instantiate()
+		enemy_dict[temp.data.type] = enemy
+		temp.queue_free()
 
 func _process(delta: float) -> void:
 	if random_spawn_timer > 0.0:
