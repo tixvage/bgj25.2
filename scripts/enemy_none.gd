@@ -18,6 +18,9 @@ var knockback: Vector2
 var knockback_timer: float = 0.0
 var health: float = MAX_HEALTH
 
+@onready var flash_timer: Timer = $FlashTimer
+@onready var sprite: Sprite2D = $Sprite2D
+
 
 func change_state(new_state: State) -> void:
 	state = new_state
@@ -36,7 +39,10 @@ func die() -> void:
 func damage(amount: float) -> void:
 	health -= amount
 	if health <= 0:
-		die() 
+		die()
+	
+	flash_timer.start()
+	sprite.material.set_shader_parameter("flash_amount", 0.8)
 
 
 func damage_from_up(raw_nearness: float, mass: float) -> void:
@@ -48,7 +54,7 @@ func damage_from_up(raw_nearness: float, mass: float) -> void:
 			nearness * mass * KNOCKBACK_FORCE_Y * Global.rng.randf_range(0.8, 1.2),
 		)
 	)
-	var damage_amount: float = mass * nearness * 5
+	var damage_amount: float = mass * nearness * 2
 	damage(damage_amount)
 
 
@@ -75,3 +81,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = global_position.direction_to(Vector2(current_target_x, global_position.y)).x * 200.0
 		#velocity.x = move_toward(velocity.x, 0, delta * accel)
 	move_and_slide()
+
+
+func _on_flash_timer_timeout() -> void:
+	sprite.material.set_shader_parameter("flash_amount", 0.0)

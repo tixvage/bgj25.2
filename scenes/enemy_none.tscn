@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://bfxyd2q71orbl"]
+[gd_scene load_steps=9 format=3 uid="uid://bfxyd2q71orbl"]
 
 [ext_resource type="Script" uid="uid://cgs4vdxquu2oq" path="res://scripts/enemy_none.gd" id="1_en8ch"]
 [ext_resource type="Script" uid="uid://cper3rsha37eo" path="res://scripts/enemy_data.gd" id="2_gqwvd"]
 [ext_resource type="Texture2D" uid="uid://b1g1yytw1fwip" path="res://assets/sprite/chefmitani.png" id="2_kar1k"]
+[ext_resource type="Shader" uid="uid://wykxxfv30sal" path="res://shaders/flash.gdshader" id="3_gqwvd"]
 
 [sub_resource type="Resource" id="Resource_d7m88"]
 script = ExtResource("2_gqwvd")
@@ -15,6 +16,12 @@ size = Vector2(19, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_da435"]
 size = Vector2(19, 32)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d7m88"]
+resource_local_to_scene = true
+shader = ExtResource("3_gqwvd")
+shader_parameter/flash_light = Vector4(1, 1, 1, 1)
+shader_parameter/flash_amount = 0.0
 
 [node name="EnemyNone" type="CharacterBody2D"]
 collision_layer = 4
@@ -31,6 +38,13 @@ position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_da435")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_d7m88")
 texture = ExtResource("2_kar1k")
 hframes = 4
 vframes = 4
+
+[node name="FlashTimer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[connection signal="timeout" from="FlashTimer" to="." method="_on_flash_timer_timeout"]
