@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b1g1yytw1fwip"
-path="res://.godot/imported/chefmitani.png-9764cd078fdbf85af3bebb8eda03f948.ctex"
+uid="uid://bj4hwbgo3tnmi"
+path="res://.godot/imported/bandim.png-5f4b5e1fdf31b11f7c735a0dbd93164f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite/chefmitani.png"
-dest_files=["res://.godot/imported/chefmitani.png-9764cd078fdbf85af3bebb8eda03f948.ctex"]
+source_file="res://assets/sprite/bandim.png"
+dest_files=["res://.godot/imported/bandim.png-5f4b5e1fdf31b11f7c735a0dbd93164f.ctex"]
 
 [params]
 

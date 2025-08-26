@@ -1,11 +1,11 @@
-[gd_scene load_steps=27 format=3 uid="uid://bfxyd2q71orbl"]
+[gd_scene load_steps=26 format=3 uid="uid://bfxyd2q71orbl"]
 
-[ext_resource type="Script" uid="uid://cgs4vdxquu2oq" path="res://scripts/enemy_none.gd" id="1_en8ch"]
+[ext_resource type="Script" uid="uid://cgs4vdxquu2oq" path="res://scripts/enemy_lotus.gd" id="1_en8ch"]
 [ext_resource type="Script" uid="uid://cper3rsha37eo" path="res://scripts/enemy_data.gd" id="2_gqwvd"]
 [ext_resource type="Shader" uid="uid://wykxxfv30sal" path="res://shaders/flash.gdshader" id="3_gqwvd"]
 [ext_resource type="Texture2D" uid="uid://b5240h5jumjff" path="res://assets/sprite/Lotusman.png" id="4_gqwvd"]
 
-[sub_resource type="Resource" id="Resource_d7m88"]
+[sub_resource type="Resource" id="Resource_qliqa"]
 script = ExtResource("2_gqwvd")
 type = 0
 xp_gain = 0
@@ -163,16 +163,10 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_d7m88"]
-resource_local_to_scene = true
-shader = ExtResource("3_gqwvd")
-shader_parameter/flash_light = Vector4(1, 1, 1, 1)
-shader_parameter/flash_amount = 0.0
-
-[node name="EnemyNone" type="CharacterBody2D"]
+[node name="EnemyLotus" type="CharacterBody2D"]
 collision_layer = 4
 script = ExtResource("1_en8ch")
-data = SubResource("Resource_d7m88")
+data = SubResource("Resource_qliqa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_1464v")
@@ -193,11 +187,6 @@ one_shot = true
 material = SubResource("ShaderMaterial_gqwvd")
 sprite_frames = SubResource("SpriteFrames_cyj6w")
 animation = &"run"
-
-[node name="Sprite2D" type="Sprite2D" parent="Root"]
-visible = false
-material = SubResource("ShaderMaterial_d7m88")
-texture = ExtResource("4_gqwvd")
 
 [node name="ObstacleRay" type="RayCast2D" parent="Root"]
 position = Vector2(0, 9)

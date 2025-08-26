@@ -1,12 +1,13 @@
-[gd_scene load_steps=14 format=4 uid="uid://x0rencevcxou"]
+[gd_scene load_steps=15 format=4 uid="uid://x0rencevcxou"]
 
 [ext_resource type="Texture2D" uid="uid://by3ptq44r5ugy" path="res://assets/sprite/partment_progression.png" id="1_25m8j"]
 [ext_resource type="Script" uid="uid://koo0xud6sagg" path="res://scripts/player.gd" id="1_hym41"]
 [ext_resource type="Script" uid="uid://g2m00mudmy2d" path="res://scripts/enemy_spawner.gd" id="2_4qpdp"]
 [ext_resource type="Script" uid="uid://bfj6hq6gj25hm" path="res://scripts/player_data.gd" id="2_70cc3"]
+[ext_resource type="PackedScene" uid="uid://dvag253a51pco" path="res://scenes/enemy_bandim.tscn" id="4_4qpdp"]
 [ext_resource type="Script" path="res://scripts/camera.gd" id="4_tccpi"]
 [ext_resource type="Texture2D" uid="uid://b4b6hife0b6b7" path="res://assets/sprite/butlermitani.png" id="4_tdn6g"]
-[ext_resource type="PackedScene" uid="uid://bfxyd2q71orbl" path="res://scenes/enemy_none.tscn" id="7_1464v"]
+[ext_resource type="PackedScene" uid="uid://bfxyd2q71orbl" path="res://scenes/enemy_lotus.tscn" id="7_1464v"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tccpi"]
 texture = ExtResource("1_25m8j")
@@ -111,18 +112,26 @@ tile_set = SubResource("TileSet_tdn6g")
 
 [node name="EnemySpawnPoints" type="Node2D" parent="."]
 
-[node name="NONE" type="Node2D" parent="EnemySpawnPoints"]
+[node name="LOTUS" type="Node2D" parent="EnemySpawnPoints"]
 
-[node name="1" type="Marker2D" parent="EnemySpawnPoints/NONE"]
+[node name="1" type="Marker2D" parent="EnemySpawnPoints/LOTUS"]
 position = Vector2(39, 516)
 
-[node name="2" type="Marker2D" parent="EnemySpawnPoints/NONE"]
+[node name="2" type="Marker2D" parent="EnemySpawnPoints/LOTUS"]
 position = Vector2(531, 431)
+
+[node name="BANDIM" type="Node2D" parent="EnemySpawnPoints"]
+
+[node name="1" type="Marker2D" parent="EnemySpawnPoints/BANDIM"]
+position = Vector2(207, 483)
+
+[node name="2" type="Marker2D" parent="EnemySpawnPoints/BANDIM"]
+position = Vector2(357, 483)
 
 [node name="EnemySpawner" type="Node2D" parent="." node_paths=PackedStringArray("pool", "spawn_points")]
 script = ExtResource("2_4qpdp")
 pool = NodePath("../EnemyPool")
-enemies = Array[Resource]([ExtResource("7_1464v")])
+enemies = Array[Resource]([ExtResource("7_1464v"), ExtResource("4_4qpdp")])
 spawn_points = NodePath("../EnemySpawnPoints")
 
 [node name="Camera2D" type="Camera2D" parent="."]

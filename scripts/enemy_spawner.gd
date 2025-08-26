@@ -2,7 +2,8 @@ extends Node2D
 class_name EnemySpawner
 
 enum Type {
-	NONE = 0,
+	LOTUS = 0,
+	BANDIM,
 }
 
 @export var pool: Node2D
@@ -37,4 +38,4 @@ func _process(delta: float) -> void:
 		random_spawn_timer -= delta
 	else:
 		random_spawn_timer = random_spawn_time
-		spawn_enemy_type(Type.NONE)
+		spawn_enemy_type(Global.rng.randi() % 2)
