@@ -73,7 +73,7 @@ func apply_knockback(time: float, force: Vector2) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	root.scale.x = 1 if velocity.x > 0 else -1
+	if velocity.x != 0: root.scale.x = 1 if velocity.x > 0 else -1
 
 	if not is_on_floor():
 		velocity += get_gravity() * delta
