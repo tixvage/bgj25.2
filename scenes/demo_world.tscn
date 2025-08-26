@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://x0rencevcxou"]
+[gd_scene load_steps=14 format=4 uid="uid://x0rencevcxou"]
 
 [ext_resource type="Texture2D" uid="uid://by3ptq44r5ugy" path="res://assets/sprite/partment_progression.png" id="1_25m8j"]
 [ext_resource type="Script" uid="uid://koo0xud6sagg" path="res://scripts/player.gd" id="1_hym41"]
@@ -96,6 +96,9 @@ metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4hlwr"]
 size = Vector2(16, 28)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1464v"]
+size = Vector2(10, 5)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tdn6g"]
 
 [node name="DemoWorld" type="Node2D"]
@@ -136,6 +139,12 @@ player_datas = Array[ExtResource("2_70cc3")]([SubResource("Resource_25m8j")])
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 position = Vector2(-3, 0)
 shape = SubResource("RectangleShape2D_4hlwr")
+
+[node name="HandArea" type="Area2D" parent="Player"]
+position = Vector2(7, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/HandArea"]
+shape = SubResource("RectangleShape2D_1464v")
 
 [node name="DashDamageArea" type="Area2D" parent="Player"]
 position = Vector2(-2, 7)

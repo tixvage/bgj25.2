@@ -11,7 +11,6 @@ const DASH_FORCE: float = 90.0
 const DASH_LIMIT: float = 150.0
 const SHAKE_FORCE: float = 1.0
 
-
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var dash_ray: RayCast2D = $DashRay
 @onready var ghost_spawn_timer: Timer = $GhostSpawnTimer
@@ -27,6 +26,7 @@ var coyote_timer: float = 0.0
 
 var data: PlayerData : get = get_current_data 
 
+
 func _ready() -> void:
 	Global.player_manager.player = self
 	change_data(0)
@@ -39,6 +39,7 @@ func change_data(new_data: int) -> void:
 
 func get_current_data() -> PlayerData:
 	return player_datas[current_data]
+
 
 func start_dash() -> void:
 	is_dashing = true
@@ -69,6 +70,7 @@ func stop_dash() -> void:
 			if nearness != 0.5:
 				var raw_nearness: float = nearness if position.x < body.global_position.x else -nearness
 				body.get_parent().damage_from_up(raw_nearness, data.mass)
+
 
 func _physics_process(delta: float) -> void:
 	var on_floor := is_on_floor()
