@@ -50,9 +50,9 @@ func damage(amount: float) -> void:
 	health -= amount
 	if health <= 0:
 		change_state(State.DIE)
-
-	flash_timer.start()
-	sprite.material.set_shader_parameter("flash_amount", 0.8)
+	else:
+		flash_timer.start()
+		sprite.material.set_shader_parameter("flash_amount", 0.8)
 
 
 func damage_from_up(raw_nearness: float, mass: float) -> void:
@@ -66,8 +66,16 @@ func damage_from_up(raw_nearness: float, mass: float) -> void:
 		)
 	)
 	var damage_amount: float = mass * nearness * 2
-	change_state(State.KNOCKBACK)
 	damage(damage_amount)
+
+
+func damage_hand(location: Vector2, amount: float) -> void:
+	if state == State.DIE: return
+	apply_knockback(
+		KNOCKBACK_TIME * 0.3,
+		Vector2(sign(global_position.x - location.x) * 500, 0)
+	)
+	damage(amount)
 
 
 func apply_knockback(time: float, force: Vector2) -> void:
@@ -75,9 +83,12 @@ func apply_knockback(time: float, force: Vector2) -> void:
 	if force.y != 0:
 		velocity.y = force.y
 	knockback_timer = time
+	change_state(State.KNOCKBACK)
 
 
 func _process(delta: float) -> void:
+	if velocity.x != 0: root.scale.x = 1 if velocity.x > 0 else -1
+
 	if state == State.DIE:
 		if velocity.y == 0:
 			sprite.play("die")
@@ -90,8 +101,6 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if velocity.x != 0: root.scale.x = 1 if velocity.x > 0 else -1
-
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 

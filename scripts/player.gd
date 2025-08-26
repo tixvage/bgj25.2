@@ -11,7 +11,9 @@ const DASH_FORCE: float = 90.0
 const DASH_LIMIT: float = 150.0
 const SHAKE_FORCE: float = 1.0
 
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var root: Node2D = $Root
+@onready var sprite: Sprite2D = $Root/Sprite2D
+@onready var hand_area: Area2D = $Root/HandArea
 @onready var dash_ray: RayCast2D = $DashRay
 @onready var ghost_spawn_timer: Timer = $GhostSpawnTimer
 @onready var dash_damage_area: Area2D = $DashDamageArea
@@ -70,6 +72,16 @@ func stop_dash() -> void:
 			if nearness != 0.5:
 				var raw_nearness: float = nearness if position.x < body.global_position.x else -nearness
 				body.get_parent().damage_from_up(raw_nearness, data.mass)
+
+
+func _process(delta: float) -> void:
+	if velocity.x != 0: root.scale.x = 1 if velocity.x > 0 else -1
+
+	if Input.is_action_just_pressed("fire"):
+		var bodies := hand_area.get_overlapping_areas()
+		for body in bodies:
+			if body.is_in_group("EnemyDash"):
+				body.get_parent().damage_hand(global_position, data.damage_amount)
 
 
 func _physics_process(delta: float) -> void:

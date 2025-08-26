@@ -93,11 +93,11 @@ damage_area = Vector2(200, 20)
 required_xp_for_next = 0
 metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_4hlwr"]
-size = Vector2(16, 28)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1464v"]
 size = Vector2(10, 5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4hlwr"]
+size = Vector2(16, 28)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tdn6g"]
 
@@ -136,15 +136,23 @@ collision_layer = 2
 script = ExtResource("1_hym41")
 player_datas = Array[ExtResource("2_70cc3")]([SubResource("Resource_25m8j")])
 
+[node name="Root" type="Node2D" parent="Player"]
+
+[node name="HandArea" type="Area2D" parent="Player/Root"]
+position = Vector2(7, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Root/HandArea"]
+shape = SubResource("RectangleShape2D_1464v")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player/Root"]
+texture = ExtResource("4_tdn6g")
+hframes = 2
+vframes = 6
+frame = 1
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 position = Vector2(-3, 0)
 shape = SubResource("RectangleShape2D_4hlwr")
-
-[node name="HandArea" type="Area2D" parent="Player"]
-position = Vector2(7, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/HandArea"]
-shape = SubResource("RectangleShape2D_1464v")
 
 [node name="DashDamageArea" type="Area2D" parent="Player"]
 position = Vector2(-2, 7)
@@ -154,12 +162,6 @@ shape = SubResource("RectangleShape2D_tdn6g")
 
 [node name="DashRay" type="RayCast2D" parent="Player"]
 target_position = Vector2(0, 90)
-
-[node name="Sprite2D" type="Sprite2D" parent="Player"]
-texture = ExtResource("4_tdn6g")
-hframes = 2
-vframes = 6
-frame = 1
 
 [node name="GhostSpawnTimer" type="Timer" parent="Player"]
 wait_time = 0.02
