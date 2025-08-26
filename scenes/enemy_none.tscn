@@ -49,8 +49,14 @@ texture = ExtResource("2_kar1k")
 hframes = 4
 vframes = 4
 
-[node name="DirectionRay" type="RayCast2D" parent="Root"]
+[node name="ObstacleRay" type="RayCast2D" parent="Root"]
 position = Vector2(0, 9)
 target_position = Vector2(30, 0)
+
+[node name="OptionalJumpRay" type="RayCast2D" parent="Root"]
+target_position = Vector2(100, -80)
+
+[node name="HeadRay" type="RayCast2D" parent="Root"]
+target_position = Vector2(0, -80)
 
 [connection signal="timeout" from="FlashTimer" to="." method="_on_flash_timer_timeout"]
