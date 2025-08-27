@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://h0ndhqd3d6fy"]
 
-[ext_resource type="Script" path="res://scripts/text_box.gd" id="1_ghj5q"]
+[ext_resource type="Script" uid="uid://dluxfs1bdps1o" path="res://scripts/text_box.gd" id="1_ghj5q"]
 [ext_resource type="FontFile" uid="uid://dtc8ex0q54sne" path="res://assets/font/Born2bSportyV10.ttf" id="3_mx0kw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k0juu"]

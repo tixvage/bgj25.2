@@ -12,7 +12,8 @@ const DASH_LIMIT: float = 150.0
 const SHAKE_FORCE: float = 1.0
 
 @onready var root: Node2D = $Root
-@onready var sprite: Sprite2D = $Root/Sprite2D
+#@onready var sprite: Sprite2D = $Root/Sprite2D
+@onready var sprite: AnimatedSprite2D = $Root/AnimatedSprite2D
 @onready var hand_area: Area2D = $Root/HandArea
 @onready var dash_ray: RayCast2D = $DashRay
 @onready var ghost_spawn_timer: Timer = $GhostSpawnTimer
@@ -21,7 +22,7 @@ const SHAKE_FORCE: float = 1.0
 
 @onready var player_ghost_scene := preload("res://scenes/player_ghost.tscn")
 
-var current_data: int = 0
+var current_data: int
 var is_dashing: bool = false
 var dash_distance: float = 0.0
 var coyote_timer: float = 0.0
@@ -31,7 +32,15 @@ var data: PlayerData : get = get_current_data
 
 func _ready() -> void:
 	Global.player_manager.player = self
-	change_data(0)
+	change_data(2)
+
+
+func get_animation() -> String:
+	return sprite.animation.substr(0, len(sprite.animation) - 2)
+
+
+func play_animation(name: String) -> void:
+	sprite.play(name + "_" + str(current_data + 1))
 
 
 func change_data(new_data: int) -> void:
@@ -56,6 +65,7 @@ func start_dash() -> void:
 
 
 func stop_dash() -> void:
+	play_animation("dash_end")
 	is_dashing = false
 	dash_distance = position.y - dash_distance
 	ghost_spawn_timer.one_shot = true
@@ -77,7 +87,20 @@ func stop_dash() -> void:
 func _process(delta: float) -> void:
 	if velocity.x != 0: root.scale.x = 1 if velocity.x > 0 else -1
 
+	var anim := get_animation()
+	if not anim in ["hit", "dash_end"]:
+		if is_dashing:
+			play_animation("dash_start")
+		if velocity == Vector2.ZERO:
+			play_animation("idle")
+		elif velocity.y != 0:
+			play_animation("jump")
+		else:
+			play_animation("run")
+
+
 	if Input.is_action_just_pressed("fire"):
+		play_animation("hit")
 		var bodies := hand_area.get_overlapping_areas()
 		for body in bodies:
 			if body.is_in_group("EnemyDash"):
@@ -114,6 +137,13 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_ghost_spawn_timer_timeout() -> void:
+	return
 	var ghost_instance = player_ghost_scene.instantiate()
-	ghost_instance.apply_sprite(sprite, position)
+	#ghost_instance.apply_sprite(sprite, position)
 	get_parent().add_child(ghost_instance)
+
+
+func _on_animated_sprite_2d_animation_finished() -> void:
+	var anim := get_animation()
+	if anim in ["hit", "dash_end"]:
+		play_animation("idle")

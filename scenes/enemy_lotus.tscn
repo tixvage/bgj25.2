@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bfxyd2q71orbl"]
+[gd_scene load_steps=28 format=3 uid="uid://bfxyd2q71orbl"]
 
 [ext_resource type="Script" uid="uid://cgs4vdxquu2oq" path="res://scripts/enemy_lotus.gd" id="1_en8ch"]
 [ext_resource type="Script" uid="uid://cper3rsha37eo" path="res://scripts/enemy_data.gd" id="2_gqwvd"]
@@ -166,10 +166,16 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ocnnu"]
+size = Vector2(20, 8)
+
 [node name="EnemyLotus" type="CharacterBody2D"]
 collision_layer = 4
 script = ExtResource("1_en8ch")
 data = SubResource("Resource_qliqa")
+
+[node name="Head" type="Marker2D" parent="."]
+position = Vector2(-1, -10)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_1464v")
@@ -194,7 +200,8 @@ shape = SubResource("RectangleShape2D_qliqa")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Root"]
 material = SubResource("ShaderMaterial_gqwvd")
 sprite_frames = SubResource("SpriteFrames_cyj6w")
-animation = &"run"
+animation = &"hit"
+frame_progress = 0.180046
 
 [node name="ObstacleRay" type="RayCast2D" parent="Root"]
 position = Vector2(0, 9)
@@ -206,5 +213,12 @@ target_position = Vector2(100, -80)
 [node name="HeadRay" type="RayCast2D" parent="Root"]
 target_position = Vector2(0, -80)
 
+[node name="Hand" type="Area2D" parent="Root"]
+position = Vector2(6, -2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Root/Hand"]
+shape = SubResource("RectangleShape2D_ocnnu")
+
 [connection signal="timeout" from="FlashTimer" to="." method="_on_flash_timer_timeout"]
+[connection signal="area_entered" from="PlayerChaseArea" to="." method="_on_player_chase_area_area_entered"]
 [connection signal="animation_finished" from="Root/AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
