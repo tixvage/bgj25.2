@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dvag253a51pco"]
+[gd_scene load_steps=23 format=3 uid="uid://dvag253a51pco"]
 
 [ext_resource type="Texture2D" uid="uid://bj4hwbgo3tnmi" path="res://assets/sprite/bandim.png" id="1_6n4i8"]
 [ext_resource type="Script" uid="uid://c7txa37pqv7mr" path="res://scripts/enemy_bandim.gd" id="1_pwmgu"]
@@ -13,6 +13,9 @@ metadata/_custom_type_script = "uid://cper3rsha37eo"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nq4ng"]
 size = Vector2(16, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wjy0h"]
+size = Vector2(100, 24)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t0s01"]
 resource_local_to_scene = true
@@ -158,6 +161,11 @@ shape = SubResource("RectangleShape2D_nq4ng")
 [node name="FlashTimer" type="Timer" parent="."]
 wait_time = 0.3
 one_shot = true
+
+[node name="PlayerChaseArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerChaseArea"]
+shape = SubResource("RectangleShape2D_wjy0h")
 
 [node name="Root" type="Node2D" parent="."]
 position = Vector2(4, 0)

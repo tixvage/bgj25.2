@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bfxyd2q71orbl"]
+[gd_scene load_steps=27 format=3 uid="uid://bfxyd2q71orbl"]
 
 [ext_resource type="Script" uid="uid://cgs4vdxquu2oq" path="res://scripts/enemy_lotus.gd" id="1_en8ch"]
 [ext_resource type="Script" uid="uid://cper3rsha37eo" path="res://scripts/enemy_data.gd" id="2_gqwvd"]
@@ -16,6 +16,9 @@ size = Vector2(19, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_da435"]
 size = Vector2(19, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qliqa"]
+size = Vector2(100, 24)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gqwvd"]
 resource_local_to_scene = true
@@ -180,6 +183,11 @@ shape = SubResource("RectangleShape2D_da435")
 [node name="FlashTimer" type="Timer" parent="."]
 wait_time = 0.3
 one_shot = true
+
+[node name="PlayerChaseArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerChaseArea"]
+shape = SubResource("RectangleShape2D_qliqa")
 
 [node name="Root" type="Node2D" parent="."]
 
