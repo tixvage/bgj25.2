@@ -46,6 +46,8 @@ var chase_count: int = 0
 
 func change_state(new_state: State) -> void:
 	last_state = state
+	if last_state == State.DIE:
+		return
 	state = new_state
 	if state == State.CHASE:
 		if first_chase:
@@ -69,6 +71,9 @@ func damage(amount: float) -> void:
 	health -= amount
 	if health <= 0:
 		change_state(State.DIE)
+		flash_timer.start(1)
+		sprite.material.set_shader_parameter("flash_amount", 0.5)
+		sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 0.0, 0.0, 1.0))
 	else:
 		flash_timer.start()
 		sprite.material.set_shader_parameter("flash_amount", 0.8)
@@ -160,7 +165,7 @@ func _physics_process(delta: float) -> void:
 	elif state == State.HIT:
 		hit_timer -= delta
 		if hit_timer < 0:
-			change_state(last_state)
+			change_state(State.CHASE)
 	elif state == State.DIE:
 		velocity.x = 0
 	elif state == State.RANDOM:

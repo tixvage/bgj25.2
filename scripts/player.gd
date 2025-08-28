@@ -13,6 +13,7 @@ const SHAKE_FORCE: float = 1.0
 
 @onready var root: Node2D = $Root
 #@onready var sprite: Sprite2D = $Root/Sprite2D
+@onready var feet_mid: Node2D = $Root/FeetMid
 @onready var move_particle: CPUParticles2D = $Root/MoveParticle
 @onready var sprite: AnimatedSprite2D = $Root/AnimatedSprite2D
 @onready var hand_area: Area2D = $Root/HandArea
@@ -25,6 +26,7 @@ const SHAKE_FORCE: float = 1.0
 
 var current_data: int
 var is_dashing: bool = false
+var is_falling: bool = false
 var dash_distance: float = 0.0
 var coyote_timer: float = 0.0
 var locked: bool = false
@@ -135,12 +137,24 @@ func _physics_process(delta: float) -> void:
 	if on_floor and is_dashing:
 		stop_dash()
 
+	if is_falling and on_floor:
+		Global.particle_manager.spawn(Particle.Type.JUMP_END, feet_mid.global_position)
+		is_falling = false
+
+	if not is_falling and velocity.y > 0:
+		is_falling = true
+
 	if Input.is_action_just_pressed("move_up") and can_jump:
 		velocity.y = -data.jump_force
 
 	var direction := Input.get_axis("move_left", "move_right") if can_move else 0.0
 	move_particle.emitting = velocity.x != 0.0 and on_floor
+	var velocity_sign_old := signf(velocity.x)
 	velocity.x = move_toward(velocity.x, direction * data.move_speed, accel * delta)
+	var velocity_sign_new := signf(velocity.x)
+	#direction changed
+	if velocity_sign_old != velocity_sign_new and velocity_sign_new != 0 and on_floor:
+		Global.particle_manager.spawn(Particle.Type.JUMP_END, feet_mid.global_position)
 
 	move_and_slide()
 

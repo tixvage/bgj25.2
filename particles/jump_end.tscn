@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8acbe161127y"]
+
+[sub_resource type="Curve" id="Curve_h62ak"]
+_data = [Vector2(0, 0.714381), 0.0, 0.0, 0, 0, Vector2(0.986842, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_h62ak"]
+offsets = PackedFloat32Array(0, 0.00359712, 0.985611, 0.996403, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.733333, 0.733333, 0.733333, 1, 0.466667, 0.466667, 0.466667, 0.8, 0.0431655, 0.0431655, 0.0431655, 1, 0, 0, 0, 1)
+
+[node name="JumpEnd" type="CPUParticles2D"]
+z_index = 50
+z_as_relative = false
+emitting = false
+amount = 16
+one_shot = true
+direction = Vector2(0, -1)
+spread = 70.0
+gravity = Vector2(0, 30)
+initial_velocity_min = 20.0
+initial_velocity_max = 20.0
+angle_min = -180.0
+angle_max = 180.0
+scale_amount_min = 2.0
+scale_amount_max = 4.0
+scale_amount_curve = SubResource("Curve_h62ak")
+color = Color(0.733333, 0.733333, 0.733333, 1)
+color_ramp = SubResource("Gradient_h62ak")

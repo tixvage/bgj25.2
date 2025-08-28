@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=4 uid="uid://x0rencevcxou"]
+[gd_scene load_steps=73 format=4 uid="uid://x0rencevcxou"]
 
 [ext_resource type="Texture2D" uid="uid://by3ptq44r5ugy" path="res://assets/sprite/partment_progression.png" id="1_25m8j"]
 [ext_resource type="Script" uid="uid://koo0xud6sagg" path="res://scripts/player.gd" id="1_hym41"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dvag253a51pco" path="res://scenes/enemy_bandim.tscn" id="4_4qpdp"]
 [ext_resource type="PackedScene" uid="uid://bqwybcstswvf5" path="res://particles/explosion.tscn" id="4_qtveh"]
 [ext_resource type="Script" uid="uid://beq2ccoyulos6" path="res://scripts/camera.gd" id="4_tccpi"]
+[ext_resource type="PackedScene" uid="uid://c8acbe161127y" path="res://particles/jump_end.tscn" id="5_ll1pc"]
 [ext_resource type="PackedScene" uid="uid://bfxyd2q71orbl" path="res://scenes/enemy_lotus.tscn" id="7_1464v"]
 [ext_resource type="Texture2D" uid="uid://umdvyh0mljrl" path="res://assets/sprite/biscuithunter123mitani-sheet.png" id="8_4qpdp"]
 [ext_resource type="PackedScene" uid="uid://f8k4ilqwn418" path="res://particles/move.tscn" id="11_33be7"]
@@ -92,6 +93,12 @@ sources/0 = SubResource("TileSetAtlasSource_tccpi")
 script = ExtResource("3_cwcxc")
 type = 1
 scene = ExtResource("4_qtveh")
+metadata/_custom_type_script = "uid://oovhr5r2b6c5"
+
+[sub_resource type="Resource" id="Resource_33be7"]
+script = ExtResource("3_cwcxc")
+type = 2
+scene = ExtResource("5_ll1pc")
 metadata/_custom_type_script = "uid://oovhr5r2b6c5"
 
 [sub_resource type="Resource" id="Resource_25m8j"]
@@ -659,7 +666,7 @@ tile_set = SubResource("TileSet_tdn6g")
 [node name="ParticleSpawner" type="Node2D" parent="." node_paths=PackedStringArray("pool")]
 script = ExtResource("2_n31jq")
 pool = NodePath("../ParticlePool")
-particles = Array[ExtResource("3_cwcxc")]([SubResource("Resource_qtveh")])
+particles = Array[ExtResource("3_cwcxc")]([SubResource("Resource_qtveh"), SubResource("Resource_33be7")])
 
 [node name="EnemyPool" type="Node2D" parent="."]
 
@@ -700,10 +707,15 @@ player_datas = Array[ExtResource("2_70cc3")]([SubResource("Resource_25m8j"), Sub
 
 [node name="Root" type="Node2D" parent="Player"]
 
+[node name="FeetMid" type="Node2D" parent="Player/Root"]
+position = Vector2(0, 10)
+
 [node name="MoveParticle" parent="Player/Root" instance=ExtResource("11_33be7")]
 z_index = 50
 position = Vector2(-6, 10)
 lifetime = 0.15
+angle_min = -180.0
+angle_max = 180.0
 
 [node name="HandArea" type="Area2D" parent="Player/Root"]
 position = Vector2(7, 1)
