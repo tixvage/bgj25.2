@@ -111,9 +111,13 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("fire"):
 		play_animation("hit")
 		var bodies := hand_area.get_overlapping_areas()
+		var hit := false
 		for body in bodies:
 			if body.is_in_group("EnemyDash"):
 				body.get_parent().damage_hand(global_position, data.damage_amount)
+				hit = true
+				break
+		Global.audio_manager.create_audio(SoundEffect.Type.HIT if hit else SoundEffect.Type.MISS)
 
 
 func _physics_process(delta: float) -> void:
@@ -168,7 +172,7 @@ func _on_ghost_spawn_timer_timeout() -> void:
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	var anim := get_animation()
-	if anim in ["dash_end", "hit"]:
+	if anim in ["dash_end"]:
 		locked = false
 	if anim in ["hit", "dash_end"]:
 		play_animation("idle")
@@ -176,5 +180,5 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 
 func _on_animated_sprite_2d_animation_changed() -> void:
 	var anim := get_animation()
-	if anim in ["dash_end", "hit"]:
+	if anim in ["dash_end"]:
 		locked = true

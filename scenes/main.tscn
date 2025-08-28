@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://c8q2wjwagov8h"]
+[gd_scene load_steps=21 format=3 uid="uid://c8q2wjwagov8h"]
 
 [ext_resource type="Script" uid="uid://cil73ed5tu74" path="res://scripts/scene_manager.gd" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://dy8vpfa4appfu" path="res://scripts/audio_manager.gd" id="2_0wfyh"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://fakgyt1igiiy" path="res://scripts/camera_manager.gd" id="6_tefeu"]
 [ext_resource type="AudioStream" uid="uid://8yc4fb1f76l3" path="res://assets/sound/dash_end.mp3" id="6_trceg"]
 [ext_resource type="Script" uid="uid://bwwc54keio8u7" path="res://scripts/enemy_manager.gd" id="7_85g3d"]
+[ext_resource type="AudioStream" uid="uid://7jfnd0gyvlu0" path="res://assets/sound/hit.mp3" id="7_a8y0u"]
 [ext_resource type="Shader" uid="uid://dmt0xf6ywpk70" path="res://shaders/subpixel.gdshader" id="7_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://h0ndhqd3d6fy" path="res://scenes/dialogue_layer.tscn" id="7_tipki"]
 [ext_resource type="Script" uid="uid://cfab6f6jqnxnv" path="res://scripts/player_manager.gd" id="8_choun"]
@@ -19,7 +20,7 @@ script = ExtResource("3_sugp2")
 limit = 5
 type = 0
 sound_effect = ExtResource("4_jyhfs")
-volume = 0
+volume = -5
 pitch_scale = 1.0
 pitch_randomness = 0.0
 metadata/_custom_type_script = "uid://d5tjmlelqgaf"
@@ -29,7 +30,7 @@ script = ExtResource("3_sugp2")
 limit = 5
 type = 1
 sound_effect = ExtResource("5_eb6dy")
-volume = 0
+volume = -5
 pitch_scale = 0.6
 pitch_randomness = 0.0
 metadata/_custom_type_script = "uid://d5tjmlelqgaf"
@@ -39,8 +40,28 @@ script = ExtResource("3_sugp2")
 limit = 5
 type = 2
 sound_effect = ExtResource("6_trceg")
-volume = 0
+volume = -5
 pitch_scale = 1.0
+pitch_randomness = 0.0
+metadata/_custom_type_script = "uid://d5tjmlelqgaf"
+
+[sub_resource type="Resource" id="Resource_jkv2x"]
+script = ExtResource("3_sugp2")
+limit = 5
+type = 3
+sound_effect = ExtResource("7_a8y0u")
+volume = -10
+pitch_scale = 1.0
+pitch_randomness = 0.3
+metadata/_custom_type_script = "uid://d5tjmlelqgaf"
+
+[sub_resource type="Resource" id="Resource_jbj1t"]
+script = ExtResource("3_sugp2")
+limit = 5
+type = 4
+sound_effect = ExtResource("7_a8y0u")
+volume = -10
+pitch_scale = 3.0
 pitch_randomness = 0.0
 metadata/_custom_type_script = "uid://d5tjmlelqgaf"
 
@@ -55,7 +76,7 @@ script = ExtResource("1_o5qli")
 
 [node name="AudioManager" type="Node" parent="."]
 script = ExtResource("2_0wfyh")
-sound_effects = Array[ExtResource("3_sugp2")]([SubResource("Resource_jyhfs"), SubResource("Resource_ya4ey"), SubResource("Resource_a8y0u")])
+sound_effects = Array[ExtResource("3_sugp2")]([SubResource("Resource_jyhfs"), SubResource("Resource_ya4ey"), SubResource("Resource_a8y0u"), SubResource("Resource_jkv2x"), SubResource("Resource_jbj1t")])
 
 [node name="WindowManager" type="Node" parent="."]
 script = ExtResource("5_tbgi4")

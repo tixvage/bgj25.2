@@ -38,11 +38,12 @@ var chase_count: int = 0
 
 @onready var flash_timer: Timer = $FlashTimer
 @onready var head: Marker2D = $Head
+@onready var root: Node2D = $Root
 @onready var sprite: AnimatedSprite2D = $Root/AnimatedSprite2D
 @onready var obstacle_ray: RayCast2D = $Root/ObstacleRay
 @onready var optional_jump_ray: RayCast2D = $Root/OptionalJumpRay
 @onready var head_ray: RayCast2D = $Root/HeadRay
-@onready var root: Node2D = $Root
+@onready var hand: Area2D = $Root/Hand
 
 func change_state(new_state: State) -> void:
 	last_state = state
@@ -67,16 +68,20 @@ func _ready() -> void:
 	change_state(State.RANDOM)
 
 
-func damage(amount: float) -> void:
+func damage(amount: float, up: bool) -> void:
 	health -= amount
 	if health <= 0:
 		change_state(State.DIE)
-		flash_timer.start(1)
+		flash_timer.start()
+		sprite.material.set_shader_parameter("line_scale", 0.0)
 		sprite.material.set_shader_parameter("flash_amount", 0.5)
 		sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 0.0, 0.0, 1.0))
 	else:
 		flash_timer.start()
-		sprite.material.set_shader_parameter("flash_amount", 0.8)
+		if up:
+			sprite.material.set_shader_parameter("flash_amount", 0.8)
+		else:
+			sprite.material.set_shader_parameter("line_scale", 1.0)
 
 
 func damage_from_up(raw_nearness: float, mass: float) -> void:
@@ -90,16 +95,19 @@ func damage_from_up(raw_nearness: float, mass: float) -> void:
 		)
 	)
 	var damage_amount: float = mass * nearness * 2
-	damage(damage_amount)
+	damage(damage_amount, true)
 
 
 func damage_hand(location: Vector2, amount: float) -> void:
 	if state == State.DIE: return
-	apply_knockback(
-		KNOCKBACK_TIME * 0.3,
-		Vector2(sign(global_position.x - location.x) * 500, 0)
-	)
-	damage(amount)
+	player_offset = randf_range(player_offset, 50.0)
+	chase_count = MAX_CHASE_BEFORE_ESCAPE - 1
+	change_state(State.CHASE)
+	#apply_knockback(
+	#	KNOCKBACK_TIME * 0.1,
+	#	Vector2(sign(global_position.x - location.x) * 500, -100)
+	#)
+	damage(amount, false)
 
 
 func apply_knockback(time: float, force: Vector2) -> void:
@@ -165,6 +173,12 @@ func _physics_process(delta: float) -> void:
 	elif state == State.HIT:
 		hit_timer -= delta
 		if hit_timer < 0:
+			var areas := hand.get_overlapping_areas()
+			for area in areas:
+				if area.is_in_group("Player"):
+					var player := area.get_parent()
+					player.damage(data.xp_steal)
+					break
 			change_state(State.CHASE)
 	elif state == State.DIE:
 		velocity.x = 0
@@ -208,6 +222,7 @@ func _physics_process(delta: float) -> void:
 func _on_flash_timer_timeout() -> void:
 	sprite.material.set_shader_parameter("flash_amount", 0.0)
 	sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 1.0, 1.0, 1.0))
+	sprite.material.set_shader_parameter("line_scale", 0.0)
 
 
 func _on_animated_sprite_2d_animation_finished() -> void:

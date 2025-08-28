@@ -132,7 +132,7 @@ required_xp_for_next = 0
 metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1464v"]
-size = Vector2(10, 5)
+size = Vector2(30, 10)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n31jq"]
 atlas = ExtResource("8_4qpdp")
@@ -704,6 +704,9 @@ position = Vector2(336, 200)
 collision_layer = 2
 script = ExtResource("1_hym41")
 player_datas = Array[ExtResource("2_70cc3")]([SubResource("Resource_25m8j"), SubResource("Resource_4qpdp"), SubResource("Resource_n31jq")])
+ground_accel = null
+air_accel = null
+coyote_time = null
 
 [node name="Root" type="Node2D" parent="Player"]
 
@@ -718,7 +721,7 @@ angle_min = -180.0
 angle_max = 180.0
 
 [node name="HandArea" type="Area2D" parent="Player/Root"]
-position = Vector2(7, 1)
+position = Vector2(9, -1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Root/HandArea"]
 shape = SubResource("RectangleShape2D_1464v")

@@ -28,6 +28,8 @@ resource_local_to_scene = true
 shader = ExtResource("3_gqwvd")
 shader_parameter/flash_light = Vector4(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
+shader_parameter/line_color = Vector4(1, 1, 1, 1)
+shader_parameter/line_scale = 0.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gqwvd"]
 atlas = ExtResource("4_gqwvd")
@@ -170,7 +172,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ocnnu"]
-size = Vector2(30, 10)
+size = Vector2(30, 30)
 
 [node name="EnemyLotus" type="CharacterBody2D"]
 collision_layer = 4
@@ -223,7 +225,7 @@ target_position = Vector2(100, -80)
 target_position = Vector2(0, -80)
 
 [node name="Hand" type="Area2D" parent="Root"]
-position = Vector2(15, -2)
+position = Vector2(15, 3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Root/Hand"]
 shape = SubResource("RectangleShape2D_ocnnu")

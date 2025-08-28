@@ -22,6 +22,8 @@ resource_local_to_scene = true
 shader = ExtResource("3_wjy0h")
 shader_parameter/flash_light = Vector4(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
+shader_parameter/line_color = Vector4(1, 1, 1, 1)
+shader_parameter/line_scale = 0.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0ob4b"]
 atlas = ExtResource("1_6n4i8")

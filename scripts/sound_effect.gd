@@ -5,6 +5,8 @@ enum Type {
 	NONE = 0,
 	DASH_START,
 	DASH_END,
+	HIT,
+	MISS,
 }
 
 @export_range(0, 10) var limit: int = 5
