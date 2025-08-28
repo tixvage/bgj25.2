@@ -26,6 +26,7 @@ func _ready() -> void:
 	enable_dialogue(tutorial_text)
 
 func enable_dialogue(text: String, texture: Texture2D = null) -> void:
+	if Global.player_manager.player: Global.player_manager.player.locked = true
 	speeding_up = false
 	visible = true
 	text_running = true
@@ -42,6 +43,7 @@ func enable_dialogue(text: String, texture: Texture2D = null) -> void:
 	text_node.text = text
 
 func disable_dialog() -> void:
+	Global.player_manager.player.locked = false
 	speeding_up = false
 	texture_node.texture = null
 	text_node.text = ""

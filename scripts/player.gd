@@ -13,6 +13,7 @@ const SHAKE_FORCE: float = 1.0
 
 @onready var root: Node2D = $Root
 #@onready var sprite: Sprite2D = $Root/Sprite2D
+@onready var move_particle: CPUParticles2D = $MoveParticle
 @onready var sprite: AnimatedSprite2D = $Root/AnimatedSprite2D
 @onready var hand_area: Area2D = $Root/HandArea
 @onready var dash_ray: RayCast2D = $DashRay
@@ -26,13 +27,14 @@ var current_data: int
 var is_dashing: bool = false
 var dash_distance: float = 0.0
 var coyote_timer: float = 0.0
+var locked: bool = false
 
 var data: PlayerData : get = get_current_data 
 
 
 func _ready() -> void:
 	Global.player_manager.player = self
-	change_data(2)
+	change_data(0)
 
 
 func get_animation() -> String:
@@ -55,8 +57,11 @@ func get_current_data() -> PlayerData:
 func start_dash() -> void:
 	is_dashing = true
 	dash_distance = position.y
+
 	ghost_spawn_timer.one_shot = false
 	ghost_spawn_timer.start()
+
+	Global.audio_manager.create_audio(SoundEffect.Type.DASH_START)
 
 	if velocity.y < 0.0:
 		velocity.y = DASH_FORCE * data.mass
@@ -72,6 +77,8 @@ func stop_dash() -> void:
 	var dash_power: float = 1.0 + min(1.0, dash_distance / (dash_ray.target_position.y * 2.0))
 	dash_distance = 0.0
 
+	Global.audio_manager.create_audio(SoundEffect.Type.DASH_END)
+	Global.particle_manager.spawn(Particle.Type.DASH_END, global_position)
 	Global.camera_manager.shake(SHAKE_FORCE * data.mass * dash_power, 5)
 	var bodies := dash_damage_area.get_overlapping_areas()
 	for body in bodies:
@@ -109,12 +116,13 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	var on_floor := is_on_floor()
-	var can_jump: bool = coyote_timer > 0.0 and velocity.y >= 0
+	var can_jump: bool = coyote_timer > 0.0 and velocity.y >= 0 and not locked
 	if on_floor:
 		coyote_timer = coyote_time
 	else:
 		coyote_timer = max(coyote_timer - delta, 0.0)
-	var can_dash: bool = not on_floor and not dash_ray.is_colliding()
+	var can_dash: bool = not on_floor and not dash_ray.is_colliding() and not locked
+	var can_move: bool = not is_dashing and not locked
 	var accel = ground_accel if on_floor else air_accel
 
 
@@ -130,7 +138,8 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("move_up") and can_jump:
 		velocity.y = -data.jump_force
 
-	var direction := Input.get_axis("move_left", "move_right") if not is_dashing else 0.0
+	var direction := Input.get_axis("move_left", "move_right") if can_move else 0.0
+	move_particle.emitting = velocity.x != 0.0 and on_floor
 	velocity.x = move_toward(velocity.x, direction * data.move_speed, accel * delta)
 
 	move_and_slide()
@@ -145,5 +154,13 @@ func _on_ghost_spawn_timer_timeout() -> void:
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	var anim := get_animation()
+	if anim in ["dash_end", "hit"]:
+		locked = false
 	if anim in ["hit", "dash_end"]:
 		play_animation("idle")
+
+
+func _on_animated_sprite_2d_animation_changed() -> void:
+	var anim := get_animation()
+	if anim in ["dash_end", "hit"]:
+		locked = true

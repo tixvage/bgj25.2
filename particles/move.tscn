@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://f8k4ilqwn418"]
+
+[sub_resource type="Curve" id="Curve_24mdv"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.819079, 0.3249), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_24mdv"]
+offsets = PackedFloat32Array(0, 0.978417, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1)
+
+[node name="Move" type="CPUParticles2D"]
+amount = 32
+lifetime = 0.5
+direction = Vector2(0, -1)
+spread = 90.0
+gravity = Vector2(0, 50)
+initial_velocity_min = 20.0
+initial_velocity_max = 50.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("Curve_24mdv")
+color_ramp = SubResource("Gradient_24mdv")
