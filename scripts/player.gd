@@ -16,6 +16,7 @@ const SHAKE_FORCE: float = 1.0
 @onready var ghost_spawn_timer: Timer = $GhostSpawnTimer
 @onready var dash_damage_area: Area2D = $DashDamageArea
 @onready var dash_damage_collision: CollisionShape2D = $DashDamageArea/CollisionShape2D
+@onready var body_area: Area2D = $Body 
 @onready var root: Node2D = $Root
 #@onready var sprite: Sprite2D = $Root/Sprite2D
 @onready var feet_mid: Node2D = $Root/FeetMid
@@ -108,7 +109,7 @@ func _process(delta: float) -> void:
 	if velocity.x != 0: root.scale.x = 1 if velocity.x > 0 else -1
 
 	var anim := get_animation()
-	if not anim in ["hit", "dash_end"]:
+	if not anim in ["hit", "dash_end", "finger", "river"]:
 		if is_dashing:
 			play_animation("dash_start")
 		if velocity == Vector2.ZERO:
@@ -118,17 +119,27 @@ func _process(delta: float) -> void:
 		else:
 			play_animation("run")
 
+	var can_hit = not locked
+	var can_eat = not locked
 
-	if Input.is_action_just_pressed("fire"):
+	if Input.is_action_just_pressed("fire") and can_hit:
 		play_animation("hit")
 		var bodies := hand_area.get_overlapping_areas()
-		var hit := false
 		for body in bodies:
 			if body.is_in_group("EnemyDash"):
 				body.get_parent().damage_hand(global_position, data.damage_amount)
-				hit = true
+				Global.audio_manager.create_audio(SoundEffect.Type.HIT)
 				break
-		Global.audio_manager.create_audio(SoundEffect.Type.HIT if hit else SoundEffect.Type.MISS)
+
+	if Input.is_action_just_pressed("eat") and can_eat:
+		var eat_animations := ["river"]
+		var bodies := body_area.get_overlapping_areas()
+		for body in bodies:
+			if body.is_in_group("EnemyDead"):
+				print("hello mf")
+				var xp_gain: float = body.get_parent().eat()
+				play_animation(eat_animations[randi() % len(eat_animations)])
+				break
 
 
 func _physics_process(delta: float) -> void:
@@ -183,15 +194,15 @@ func _on_ghost_spawn_timer_timeout() -> void:
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	var anim := get_animation()
-	if anim in ["dash_end"]:
-		locked = false
-	if anim in ["hit", "dash_end"]:
+	#if anim in ["dash_end", "river", "finger"]:
+	locked = false
+	if anim in ["hit", "dash_end", "river", "finger"]:
 		play_animation("idle")
 
 
 func _on_animated_sprite_2d_animation_changed() -> void:
 	var anim := get_animation()
-	if anim in ["dash_end"]:
+	if anim in ["dash_end", "river", "finger"]:
 		locked = true
 
 

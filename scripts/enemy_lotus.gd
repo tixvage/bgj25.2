@@ -9,6 +9,7 @@ enum State {
 	CHASE,
 	HIT,
 	DIE,
+	WAIT_FOR_EAT,
 	KNOCKBACK,
 }
 
@@ -51,7 +52,7 @@ var chase_count: int = 0
 
 func change_state(new_state: State) -> void:
 	last_state = state
-	if last_state == State.DIE:
+	if last_state in [State.DIE, State.WAIT_FOR_EAT] and not new_state in [State.WAIT_FOR_EAT]:
 		return
 	state = new_state
 	if state == State.CHASE:
@@ -71,6 +72,13 @@ func change_state(new_state: State) -> void:
 
 func _ready() -> void:
 	change_state(State.RANDOM)
+	$DeadArea/CollisionShape2D.disabled = true
+
+
+func eat() -> float:
+	#for now
+	call_deferred("queue_free")
+	return data.xp_gain
 
 
 func damage(amount: float, up: bool) -> void:
@@ -90,7 +98,7 @@ func damage(amount: float, up: bool) -> void:
 
 
 func damage_from_up(raw_nearness: float, mass: float) -> void:
-	if state == State.DIE: return
+	if state in [State.DIE, State.WAIT_FOR_EAT]: return
 	var nearness: float = absf(raw_nearness)
 	apply_knockback(
 		KNOCKBACK_TIME * nearness * Global.rng.randf_range(0.8, 1.2),
@@ -104,7 +112,7 @@ func damage_from_up(raw_nearness: float, mass: float) -> void:
 
 
 func damage_hand(location: Vector2, amount: float) -> void:
-	if state == State.DIE: return
+	if state in [State.DIE, State.WAIT_FOR_EAT]: return
 	player_offset = randf_range(player_offset, 50.0)
 	chase_count = MAX_CHASE_BEFORE_ESCAPE - 1
 	change_state(State.CHASE)
@@ -130,6 +138,8 @@ func _process(delta: float) -> void:
 	if state == State.DIE:
 		if velocity.y == 0:
 			sprite.play("die")
+	elif state == State.WAIT_FOR_EAT:
+		sprite.play("die_wait")
 	elif state == State.HIT:
 		root.scale.x = 1 if global_position.x < player_position.x else -1
 		sprite.play("hit")
@@ -237,7 +247,8 @@ func _on_flash_timer_timeout() -> void:
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if sprite.animation == "die":
-		queue_free()
+		$DeadArea/CollisionShape2D.disabled = false
+		change_state(State.WAIT_FOR_EAT)
 
 
 func _on_player_chase_area_area_entered(area: Area2D) -> void:

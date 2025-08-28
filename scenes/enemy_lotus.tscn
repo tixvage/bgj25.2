@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bfxyd2q71orbl"]
+[gd_scene load_steps=30 format=3 uid="uid://bfxyd2q71orbl"]
 
 [ext_resource type="Script" uid="uid://cgs4vdxquu2oq" path="res://scripts/enemy_lotus.gd" id="1_en8ch"]
 [ext_resource type="Script" uid="uid://cper3rsha37eo" path="res://scripts/enemy_data.gd" id="2_gqwvd"]
@@ -48,7 +48,7 @@ region = Rect2(48, 96, 24, 24)
 atlas = ExtResource("4_gqwvd")
 region = Rect2(72, 96, 24, 24)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_y42mx"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_qliqa"]
 atlas = ExtResource("4_gqwvd")
 region = Rect2(96, 96, 24, 24)
 
@@ -110,12 +110,17 @@ animations = [{
 }, {
 "duration": 0.8,
 "texture": SubResource("AtlasTexture_t8boq")
-}, {
-"duration": 0.8,
-"texture": SubResource("AtlasTexture_y42mx")
 }],
 "loop": false,
 "name": &"die",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qliqa")
+}],
+"loop": false,
+"name": &"die_wait",
 "speed": 5.0
 }, {
 "frames": [{
@@ -175,6 +180,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ocnnu"]
 size = Vector2(30, 30)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lo3x6"]
+size = Vector2(30, 8)
+
 [node name="EnemyLotus" type="CharacterBody2D"]
 collision_layer = 4
 script = ExtResource("1_en8ch")
@@ -212,8 +220,7 @@ shape = SubResource("RectangleShape2D_qliqa")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Root"]
 material = SubResource("ShaderMaterial_gqwvd")
 sprite_frames = SubResource("SpriteFrames_cyj6w")
-animation = &"hit"
-frame_progress = 0.180046
+animation = &"die_wait"
 
 [node name="ObstacleRay" type="RayCast2D" parent="Root"]
 position = Vector2(0, 9)
@@ -233,6 +240,12 @@ shape = SubResource("RectangleShape2D_ocnnu")
 
 [node name="BloodMarker" type="Marker2D" parent="Root/Hand"]
 position = Vector2(-1, -6)
+
+[node name="DeadArea" type="Area2D" parent="." groups=["EnemyDead"]]
+position = Vector2(-1, 8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeadArea"]
+shape = SubResource("RectangleShape2D_lo3x6")
 
 [connection signal="timeout" from="FlashTimer" to="." method="_on_flash_timer_timeout"]
 [connection signal="area_exited" from="PlayeerChaseExitArea" to="." method="_on_player_chase_exit_area_area_exited"]
