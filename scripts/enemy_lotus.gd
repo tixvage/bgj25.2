@@ -107,11 +107,13 @@ func apply_knockback(time: float, force: Vector2) -> void:
 
 func _process(delta: float) -> void:
 	if velocity.x != 0: root.scale.x = 1 if velocity.x > 0 else -1
+	var player_position: Vector2 = Global.player_manager.player.global_position
 
 	if state == State.DIE:
 		if velocity.y == 0:
 			sprite.play("die")
 	elif state == State.HIT:
+		root.scale.x = 1 if global_position.x < player_position.x else -1
 		sprite.play("hit")
 	elif velocity == Vector2.ZERO:
 		sprite.play("idle")
@@ -210,12 +212,12 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 
 func _on_player_chase_area_area_entered(area: Area2D) -> void:
 	if not area.is_in_group("Player"): return
-	first_chase = true
+	if not state in [State.CHASE, State.HIT]: first_chase = true
 	change_state(State.CHASE)
 
 
 func _on_player_chase_exit_area_area_exited(area: Area2D) -> void:
 	if not area.is_in_group("Player"): return
-	if state in [State.CHASE, State.HIT]:
+	if state in [State.CHASE, State.HIT, State.IDLE]:
 		need_new_target = true
 		change_state(State.RANDOM)
