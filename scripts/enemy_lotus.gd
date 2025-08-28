@@ -18,7 +18,9 @@ const KNOCKBACK_FORCE_X: float = 10.0
 const KNOCKBACK_FORCE_Y: float = -30.0
 const KNOCKBACK_TIME: float = 0.7
 const IDLE_TIME: float = 1.0
-const HIT_TIME: float = 1.0
+const HIT_ANIM_TIME: float = 1.0
+const HIT_TIME: float = HIT_ANIM_TIME / 5.0
+const MAX_HIT: float = 10.0
 const MAX_CHASE_BEFORE_ESCAPE: int = 3
 
 var accel: float = 200.0 
@@ -31,6 +33,7 @@ var health: float = MAX_HEALTH
 var need_new_target: bool = true
 var skipped_possible_jump: bool = false
 var idle_timer: float = IDLE_TIME
+var hit_anim_timer: float = HIT_ANIM_TIME
 var hit_timer: float = HIT_TIME
 var player_offset: float = 0.0
 var first_chase: bool = true
@@ -44,6 +47,7 @@ var chase_count: int = 0
 @onready var optional_jump_ray: RayCast2D = $Root/OptionalJumpRay
 @onready var head_ray: RayCast2D = $Root/HeadRay
 @onready var hand: Area2D = $Root/Hand
+@onready var blood_marker: Marker2D = $Root/Hand/BloodMarker
 
 func change_state(new_state: State) -> void:
 	last_state = state
@@ -56,6 +60,7 @@ func change_state(new_state: State) -> void:
 			first_chase = false
 			chase_count = 0
 	elif state == State.HIT:
+		hit_anim_timer = HIT_ANIM_TIME
 		hit_timer = HIT_TIME
 	elif state == State.IDLE:
 		idle_timer = IDLE_TIME
@@ -171,14 +176,19 @@ func _physics_process(delta: float) -> void:
 				player_offset = randf_range(10.0, player_offset)
 				change_state(State.HIT)
 	elif state == State.HIT:
+		hit_anim_timer -= delta
 		hit_timer -= delta
 		if hit_timer < 0:
+			hit_timer = HIT_TIME
 			var areas := hand.get_overlapping_areas()
 			for area in areas:
 				if area.is_in_group("Player"):
 					var player := area.get_parent()
 					player.damage(data.xp_steal)
+					Global.audio_manager.create_audio(SoundEffect.Type.HIT_ENEMY)
+					Global.particle_manager.spawn(Particle.Type.BLOOD, blood_marker.global_position, Global.player_manager.player)
 					break
+		if hit_anim_timer < 0:
 			change_state(State.CHASE)
 	elif state == State.DIE:
 		velocity.x = 0

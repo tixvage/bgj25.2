@@ -11,19 +11,21 @@ const DASH_FORCE: float = 90.0
 const DASH_LIMIT: float = 150.0
 const SHAKE_FORCE: float = 1.0
 
+@onready var shader_timer: Timer = $ShaderTimer
+@onready var dash_ray: RayCast2D = $DashRay
+@onready var ghost_spawn_timer: Timer = $GhostSpawnTimer
+@onready var dash_damage_area: Area2D = $DashDamageArea
+@onready var dash_damage_collision: CollisionShape2D = $DashDamageArea/CollisionShape2D
 @onready var root: Node2D = $Root
 #@onready var sprite: Sprite2D = $Root/Sprite2D
 @onready var feet_mid: Node2D = $Root/FeetMid
 @onready var move_particle: CPUParticles2D = $Root/MoveParticle
 @onready var sprite: AnimatedSprite2D = $Root/AnimatedSprite2D
 @onready var hand_area: Area2D = $Root/HandArea
-@onready var dash_ray: RayCast2D = $DashRay
-@onready var ghost_spawn_timer: Timer = $GhostSpawnTimer
-@onready var dash_damage_area: Area2D = $DashDamageArea
-@onready var dash_damage_collision: CollisionShape2D = $DashDamageArea/CollisionShape2D
 
 @onready var player_ghost_scene := preload("res://scenes/player_ghost.tscn")
 
+var xp: float = 0.0
 var current_data: int
 var is_dashing: bool = false
 var is_falling: bool = false
@@ -36,7 +38,7 @@ var data: PlayerData : get = get_current_data
 
 func _ready() -> void:
 	Global.player_manager.player = self
-	change_data(0)
+	change_data(2)
 
 
 func get_animation() -> String:
@@ -50,6 +52,15 @@ func play_animation(name: String) -> void:
 func change_data(new_data: int) -> void:
 	current_data = new_data
 	dash_damage_collision.shape.size = data.damage_area
+
+
+func damage(xp_steal: float) -> void:
+	xp -= xp_steal
+	shader_timer.start()
+	sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 0.0, 0.0, 1.0))
+	sprite.material.set_shader_parameter("flash_amount", 0.9)
+	Global.camera_manager.shake(SHAKE_FORCE * 0.6, 10)
+
 
 
 func get_current_data() -> PlayerData:
@@ -182,3 +193,9 @@ func _on_animated_sprite_2d_animation_changed() -> void:
 	var anim := get_animation()
 	if anim in ["dash_end"]:
 		locked = true
+
+
+func _on_shader_timer_timeout() -> void:
+	sprite.material.set_shader_parameter("flash_amount", 0.0)
+	sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 1.0, 1.0, 1.0))
+	sprite.material.set_shader_parameter("line_scale", 0.0)

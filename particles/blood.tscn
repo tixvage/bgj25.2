@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://dslcutixyex48"]
+
+[ext_resource type="Texture2D" uid="uid://d3whcce765157" path="res://assets/sprite/blood.png" id="1_aas14"]
+
+[sub_resource type="Curve" id="Curve_ap6w7"]
+_data = [Vector2(0.00328948, 1), 0.0, 0.0, 0, 0, Vector2(0.960526, 0.515313), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="Blood" type="CPUParticles2D"]
+z_index = 50
+z_as_relative = false
+emitting = false
+amount = 16
+texture = ExtResource("1_aas14")
+lifetime = 0.2
+one_shot = true
+explosiveness = 1.0
+spread = 25.0
+gravity = Vector2(0, 100)
+initial_velocity_min = 1.0
+initial_velocity_max = 200.0
+angle_min = -180.0
+angle_max = 180.0
+scale_amount_min = 0.1
+scale_amount_max = 0.3
+scale_amount_curve = SubResource("Curve_ap6w7")
+color = Color(0.877346, 3.87453e-06, 1.2514e-06, 1)

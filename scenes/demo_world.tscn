@@ -1,4 +1,4 @@
-[gd_scene load_steps=73 format=4 uid="uid://x0rencevcxou"]
+[gd_scene load_steps=77 format=4 uid="uid://x0rencevcxou"]
 
 [ext_resource type="Texture2D" uid="uid://by3ptq44r5ugy" path="res://assets/sprite/partment_progression.png" id="1_25m8j"]
 [ext_resource type="Script" uid="uid://koo0xud6sagg" path="res://scripts/player.gd" id="1_hym41"]
@@ -10,9 +10,11 @@
 [ext_resource type="PackedScene" uid="uid://bqwybcstswvf5" path="res://particles/explosion.tscn" id="4_qtveh"]
 [ext_resource type="Script" uid="uid://beq2ccoyulos6" path="res://scripts/camera.gd" id="4_tccpi"]
 [ext_resource type="PackedScene" uid="uid://c8acbe161127y" path="res://particles/jump_end.tscn" id="5_ll1pc"]
+[ext_resource type="PackedScene" uid="uid://dslcutixyex48" path="res://particles/blood.tscn" id="6_ui73o"]
 [ext_resource type="PackedScene" uid="uid://bfxyd2q71orbl" path="res://scenes/enemy_lotus.tscn" id="7_1464v"]
 [ext_resource type="Texture2D" uid="uid://umdvyh0mljrl" path="res://assets/sprite/biscuithunter123mitani-sheet.png" id="8_4qpdp"]
 [ext_resource type="PackedScene" uid="uid://f8k4ilqwn418" path="res://particles/move.tscn" id="11_33be7"]
+[ext_resource type="Shader" uid="uid://wykxxfv30sal" path="res://shaders/flash.gdshader" id="13_jgk0q"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tccpi"]
 texture = ExtResource("1_25m8j")
@@ -101,6 +103,12 @@ type = 2
 scene = ExtResource("5_ll1pc")
 metadata/_custom_type_script = "uid://oovhr5r2b6c5"
 
+[sub_resource type="Resource" id="Resource_jgk0q"]
+script = ExtResource("3_cwcxc")
+type = 3
+scene = ExtResource("6_ui73o")
+metadata/_custom_type_script = "uid://oovhr5r2b6c5"
+
 [sub_resource type="Resource" id="Resource_25m8j"]
 script = ExtResource("2_70cc3")
 move_speed = 300.0
@@ -133,6 +141,14 @@ metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1464v"]
 size = Vector2(30, 10)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ll1pc"]
+resource_local_to_scene = true
+shader = ExtResource("13_jgk0q")
+shader_parameter/flash_light = Vector4(1, 1, 1, 1)
+shader_parameter/flash_amount = 0.0
+shader_parameter/line_color = Vector4(1, 1, 1, 1)
+shader_parameter/line_scale = 0.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n31jq"]
 atlas = ExtResource("8_4qpdp")
@@ -666,7 +682,7 @@ tile_set = SubResource("TileSet_tdn6g")
 [node name="ParticleSpawner" type="Node2D" parent="." node_paths=PackedStringArray("pool")]
 script = ExtResource("2_n31jq")
 pool = NodePath("../ParticlePool")
-particles = Array[ExtResource("3_cwcxc")]([SubResource("Resource_qtveh"), SubResource("Resource_33be7")])
+particles = Array[ExtResource("3_cwcxc")]([SubResource("Resource_qtveh"), SubResource("Resource_33be7"), SubResource("Resource_jgk0q")])
 
 [node name="EnemyPool" type="Node2D" parent="."]
 
@@ -704,9 +720,6 @@ position = Vector2(336, 200)
 collision_layer = 2
 script = ExtResource("1_hym41")
 player_datas = Array[ExtResource("2_70cc3")]([SubResource("Resource_25m8j"), SubResource("Resource_4qpdp"), SubResource("Resource_n31jq")])
-ground_accel = null
-air_accel = null
-coyote_time = null
 
 [node name="Root" type="Node2D" parent="Player"]
 
@@ -727,6 +740,7 @@ position = Vector2(9, -1)
 shape = SubResource("RectangleShape2D_1464v")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player/Root"]
+material = SubResource("ShaderMaterial_ll1pc")
 sprite_frames = SubResource("SpriteFrames_1464v")
 animation = &"run_1"
 
@@ -745,6 +759,10 @@ target_position = Vector2(0, 90)
 [node name="GhostSpawnTimer" type="Timer" parent="Player"]
 wait_time = 0.02
 
+[node name="ShaderTimer" type="Timer" parent="Player"]
+wait_time = 0.1
+one_shot = true
+
 [node name="Body" type="Area2D" parent="Player" groups=["Player"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Body"]
@@ -753,3 +771,4 @@ shape = SubResource("RectangleShape2D_4qpdp")
 [connection signal="animation_changed" from="Player/Root/AnimatedSprite2D" to="Player" method="_on_animated_sprite_2d_animation_changed"]
 [connection signal="animation_finished" from="Player/Root/AnimatedSprite2D" to="Player" method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="timeout" from="Player/GhostSpawnTimer" to="Player" method="_on_ghost_spawn_timer_timeout"]
+[connection signal="timeout" from="Player/ShaderTimer" to="Player" method="_on_shader_timer_timeout"]

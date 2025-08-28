@@ -9,6 +9,7 @@
 script = ExtResource("2_gqwvd")
 type = 0
 xp_gain = 20
+xp_steal = 0.0
 metadata/_custom_type_script = "uid://cper3rsha37eo"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1464v"]
@@ -229,6 +230,9 @@ position = Vector2(15, 3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Root/Hand"]
 shape = SubResource("RectangleShape2D_ocnnu")
+
+[node name="BloodMarker" type="Marker2D" parent="Root/Hand"]
+position = Vector2(-1, -6)
 
 [connection signal="timeout" from="FlashTimer" to="." method="_on_flash_timer_timeout"]
 [connection signal="area_exited" from="PlayeerChaseExitArea" to="." method="_on_player_chase_exit_area_area_exited"]

@@ -4,7 +4,8 @@ class_name Particle
 enum Type {
 	HIT = 0,
 	DASH_END,
-	JUMP_END
+	JUMP_END,
+	BLOOD,
 }
 
 @export var type: Type

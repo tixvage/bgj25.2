@@ -6,6 +6,7 @@ enum Type {
 	DASH_START,
 	DASH_END,
 	HIT,
+	HIT_ENEMY,
 	MISS,
 }
 
