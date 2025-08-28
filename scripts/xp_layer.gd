@@ -9,7 +9,7 @@ const MAX_COOKIE_COUNT: float = 6.0
 
 func update_xp(xp: float, required_xp: float) -> void:
 	var child_count := container.get_child_count()
-	var cookie_count: int = floori((xp / required_xp) * MAX_COOKIE_COUNT)
+	var cookie_count: int = roundi((xp / required_xp) * MAX_COOKIE_COUNT)
 
 	var diff = abs(child_count - cookie_count)
 

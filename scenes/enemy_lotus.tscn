@@ -204,10 +204,10 @@ shape = SubResource("RectangleShape2D_da435")
 wait_time = 0.3
 one_shot = true
 
-[node name="PlayeerChaseExitArea" type="Area2D" parent="."]
+[node name="PlayerChaseExitArea" type="Area2D" parent="."]
 position = Vector2(0, -88)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayeerChaseExitArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerChaseExitArea"]
 shape = SubResource("RectangleShape2D_k7d45")
 
 [node name="PlayerChaseArea" type="Area2D" parent="."]
@@ -248,6 +248,6 @@ position = Vector2(-1, 8)
 shape = SubResource("RectangleShape2D_lo3x6")
 
 [connection signal="timeout" from="FlashTimer" to="." method="_on_flash_timer_timeout"]
-[connection signal="area_exited" from="PlayeerChaseExitArea" to="." method="_on_player_chase_exit_area_area_exited"]
+[connection signal="area_exited" from="PlayerChaseExitArea" to="." method="_on_player_chase_exit_area_area_exited"]
 [connection signal="area_entered" from="PlayerChaseArea" to="." method="_on_player_chase_area_area_entered"]
 [connection signal="animation_finished" from="Root/AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

@@ -10,6 +10,7 @@ class_name Player
 const DASH_FORCE: float = 90.0
 const DASH_LIMIT: float = 150.0
 const SHAKE_FORCE: float = 1.0
+const WEIGHT_ANIM_MAX: int = 8
 
 @onready var shader_timer: Timer = $ShaderTimer
 @onready var dash_ray: RayCast2D = $DashRay
@@ -33,6 +34,8 @@ var is_falling: bool = false
 var dash_distance: float = 0.0
 var coyote_timer: float = 0.0
 var locked: bool = false
+var weight_change: bool = false
+var weight_anim_count: int = 0
 
 var data: PlayerData : get = get_current_data 
 
@@ -69,13 +72,24 @@ func damage(xp_steal: float) -> void:
 	Global.camera_manager.shake(SHAKE_FORCE * 0.6, 10)
 
 
+func get_fat():
+	Global.enemy_manager.lock = true
+	weight_change = true
+	shader_timer.stop()
+	shader_timer.start()
+	sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 1.0, 1.0, 1.0))
+	sprite.material.set_shader_parameter("flash_amount", 0.7)
+	next_data()
+	play_animation("change")
+
+
 func add_xp(amount: float) -> void:
 	xp += amount
 	xp = min(xp, data.required_xp_for_next)
 	Global.stat_manager.update_xp(xp, data.required_xp_for_next)
 	if xp == data.required_xp_for_next:
-		next_data()
-		play_animation("change")
+		get_fat()
+
 
 func get_current_data() -> PlayerData:
 	return player_datas[current_data]
@@ -209,10 +223,10 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 	var anim := get_animation()
 	#if anim in ["dash_end", "river", "finger"]:
 	locked = false
-	if anim in ["hit", "dash_end", "river", "finger", "change"]:
-		play_animation("idle")
 	if anim in ["change"]:
 		add_xp(0)
+	if anim in ["hit", "dash_end", "river", "finger", "change"]:
+		play_animation("idle")
 
 
 func _on_animated_sprite_2d_animation_changed() -> void:
@@ -222,6 +236,18 @@ func _on_animated_sprite_2d_animation_changed() -> void:
 
 
 func _on_shader_timer_timeout() -> void:
-	sprite.material.set_shader_parameter("flash_amount", 0.0)
-	sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 1.0, 1.0, 1.0))
-	sprite.material.set_shader_parameter("line_scale", 0.0)
+	if weight_change:
+		shader_timer.start()
+		if weight_anim_count % 2 == 0:
+			sprite.material.set_shader_parameter("flash_amount", 0.0)
+		else:
+			sprite.material.set_shader_parameter("flash_amount", 0.7)
+		weight_anim_count += 1
+		if weight_anim_count == WEIGHT_ANIM_MAX:
+			weight_anim_count = 0
+			weight_change = false
+			Global.enemy_manager.lock = false
+	else:
+		sprite.material.set_shader_parameter("flash_amount", 0.0)
+		sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 1.0, 1.0, 1.0))
+		sprite.material.set_shader_parameter("line_scale", 0.0)

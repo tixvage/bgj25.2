@@ -670,12 +670,12 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4hlwr"]
-size = Vector2(16, 24)
+size = Vector2(20, 48)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tdn6g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4qpdp"]
-size = Vector2(12, 24)
+size = Vector2(20, 48)
 
 [node name="DemoWorld" type="Node2D"]
 
@@ -730,23 +730,24 @@ player_datas = Array[ExtResource("2_70cc3")]([SubResource("Resource_25m8j"), Sub
 [node name="Root" type="Node2D" parent="Player"]
 
 [node name="FeetMid" type="Node2D" parent="Player/Root"]
-position = Vector2(0, 10)
+position = Vector2(-1, 20)
 
 [node name="MoveParticle" parent="Player/Root" instance=ExtResource("11_33be7")]
 z_index = 50
-position = Vector2(-6, 10)
+position = Vector2(-5, 20)
 lifetime = 0.15
 angle_min = -180.0
 angle_max = 180.0
 
 [node name="HandArea" type="Area2D" parent="Player/Root"]
-position = Vector2(9, -1)
+position = Vector2(11, -1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Root/HandArea"]
 shape = SubResource("RectangleShape2D_1464v")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player/Root"]
 material = SubResource("ShaderMaterial_ll1pc")
+scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_1464v")
 animation = &"idle_1"
 
@@ -754,6 +755,7 @@ animation = &"idle_1"
 shape = SubResource("RectangleShape2D_4hlwr")
 
 [node name="DashDamageArea" type="Area2D" parent="Player"]
+position = Vector2(0, 14)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/DashDamageArea"]
 shape = SubResource("RectangleShape2D_tdn6g")

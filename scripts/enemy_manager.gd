@@ -5,6 +5,8 @@ class_name EnemyManager extends Node
 
 var spawner: EnemySpawner
 
+var lock: bool = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Global.enemy_manager = self
