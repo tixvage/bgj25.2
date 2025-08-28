@@ -152,7 +152,7 @@ required_xp_for_next = 600
 metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1464v"]
-size = Vector2(30, 10)
+size = Vector2(30, 30)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ll1pc"]
 resource_local_to_scene = true
@@ -925,7 +925,7 @@ angle_min = -180.0
 angle_max = 180.0
 
 [node name="HandArea" type="Area2D" parent="Player/Root"]
-position = Vector2(11, -1)
+position = Vector2(17, -1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Root/HandArea"]
 shape = SubResource("RectangleShape2D_1464v")
@@ -934,8 +934,9 @@ shape = SubResource("RectangleShape2D_1464v")
 material = SubResource("ShaderMaterial_ll1pc")
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_1464v")
-animation = &"final"
-frame_progress = 0.432307
+animation = &"idle_1"
+frame = 1
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("RectangleShape2D_4hlwr")
