@@ -37,9 +37,15 @@ var locked: bool = false
 var data: PlayerData : get = get_current_data 
 
 
+func next_data() -> void:
+	xp = 0
+	current_data += 1
+
+
 func _ready() -> void:
 	Global.player_manager.player = self
-	change_data(2)
+	change_data(0)
+	play_animation("idle")
 
 
 func get_animation() -> String:
@@ -56,13 +62,20 @@ func change_data(new_data: int) -> void:
 
 
 func damage(xp_steal: float) -> void:
-	xp -= xp_steal
+	add_xp(-xp_steal)
 	shader_timer.start()
 	sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 0.0, 0.0, 1.0))
 	sprite.material.set_shader_parameter("flash_amount", 0.9)
 	Global.camera_manager.shake(SHAKE_FORCE * 0.6, 10)
 
 
+func add_xp(amount: float) -> void:
+	xp += amount
+	xp = min(xp, data.required_xp_for_next)
+	Global.stat_manager.update_xp(xp, data.required_xp_for_next)
+	if xp == data.required_xp_for_next:
+		next_data()
+		play_animation("change")
 
 func get_current_data() -> PlayerData:
 	return player_datas[current_data]
@@ -109,7 +122,7 @@ func _process(delta: float) -> void:
 	if velocity.x != 0: root.scale.x = 1 if velocity.x > 0 else -1
 
 	var anim := get_animation()
-	if not anim in ["hit", "dash_end", "finger", "river"]:
+	if not anim in ["hit", "dash_end", "finger", "river", "change"]:
 		if is_dashing:
 			play_animation("dash_start")
 		if velocity == Vector2.ZERO:
@@ -132,13 +145,13 @@ func _process(delta: float) -> void:
 				break
 
 	if Input.is_action_just_pressed("eat") and can_eat:
-		var eat_animations := ["river"]
+		var eat_animations := ["river", "finger"]
 		var bodies := body_area.get_overlapping_areas()
 		for body in bodies:
 			if body.is_in_group("EnemyDead"):
-				print("hello mf")
 				var xp_gain: float = body.get_parent().eat()
 				play_animation(eat_animations[randi() % len(eat_animations)])
+				add_xp(xp_gain)
 				break
 
 
@@ -196,13 +209,15 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 	var anim := get_animation()
 	#if anim in ["dash_end", "river", "finger"]:
 	locked = false
-	if anim in ["hit", "dash_end", "river", "finger"]:
+	if anim in ["hit", "dash_end", "river", "finger", "change"]:
 		play_animation("idle")
+	if anim in ["change"]:
+		add_xp(0)
 
 
 func _on_animated_sprite_2d_animation_changed() -> void:
 	var anim := get_animation()
-	if anim in ["dash_end", "river", "finger"]:
+	if anim in ["dash_end", "river", "finger", "change"]:
 		locked = true
 
 

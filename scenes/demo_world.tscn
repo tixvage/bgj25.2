@@ -116,7 +116,7 @@ jump_force = 500.0
 damage_amount = 10.0
 mass = 10.0
 damage_area = Vector2(200, 20)
-required_xp_for_next = 0
+required_xp_for_next = 100
 metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 
 [sub_resource type="Resource" id="Resource_4qpdp"]
@@ -126,7 +126,7 @@ jump_force = 450.0
 damage_amount = 20.0
 mass = 20.0
 damage_area = Vector2(250, 20)
-required_xp_for_next = 0
+required_xp_for_next = 100
 metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 
 [sub_resource type="Resource" id="Resource_n31jq"]
@@ -136,7 +136,7 @@ jump_force = 430.0
 damage_amount = 30.0
 mass = 30.0
 damage_area = Vector2(300, 20)
-required_xp_for_next = 0
+required_xp_for_next = 100
 metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1464v"]
@@ -341,24 +341,30 @@ region = Rect2(24, 48, 24, 24)
 [sub_resource type="SpriteFrames" id="SpriteFrames_1464v"]
 animations = [{
 "frames": [{
-"duration": 1.0,
+"duration": 3.0,
 "texture": SubResource("AtlasTexture_n31jq")
-}],
-"loop": false,
-"name": &"change_1",
-"speed": 5.0
 }, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cwcxc")
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_n31jq")
 }],
 "loop": false,
 "name": &"change_2",
 "speed": 5.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_cwcxc")
+}, {
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_cwcxc")
+}],
 "loop": false,
 "name": &"change_3",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"change_4",
 "speed": 5.0
 }, {
 "frames": [{

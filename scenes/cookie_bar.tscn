@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://dnw0sax2rqtsj"]
+
+[ext_resource type="Texture2D" uid="uid://f41wce0omvam" path="res://assets/sprite/biscuittojar.png" id="1_2ne76"]
+
+[node name="CookieBar" type="TextureRect"]
+z_index = -5
+z_as_relative = false
+texture = ExtResource("1_2ne76")
+expand_mode = 5
+stretch_mode = 4
