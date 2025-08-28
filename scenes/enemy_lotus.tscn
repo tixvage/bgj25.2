@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bfxyd2q71orbl"]
+[gd_scene load_steps=29 format=3 uid="uid://bfxyd2q71orbl"]
 
 [ext_resource type="Script" uid="uid://cgs4vdxquu2oq" path="res://scripts/enemy_lotus.gd" id="1_en8ch"]
 [ext_resource type="Script" uid="uid://cper3rsha37eo" path="res://scripts/enemy_data.gd" id="2_gqwvd"]
@@ -8,7 +8,7 @@
 [sub_resource type="Resource" id="Resource_qliqa"]
 script = ExtResource("2_gqwvd")
 type = 0
-xp_gain = 0
+xp_gain = 20
 metadata/_custom_type_script = "uid://cper3rsha37eo"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1464v"]
@@ -17,8 +17,11 @@ size = Vector2(19, 24)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_da435"]
 size = Vector2(19, 24)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k7d45"]
+size = Vector2(350, 350)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qliqa"]
-size = Vector2(100, 24)
+size = Vector2(180, 24)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gqwvd"]
 resource_local_to_scene = true
@@ -167,7 +170,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ocnnu"]
-size = Vector2(20, 8)
+size = Vector2(30, 10)
 
 [node name="EnemyLotus" type="CharacterBody2D"]
 collision_layer = 4
@@ -189,6 +192,12 @@ shape = SubResource("RectangleShape2D_da435")
 [node name="FlashTimer" type="Timer" parent="."]
 wait_time = 0.3
 one_shot = true
+
+[node name="PlayeerChaseExitArea" type="Area2D" parent="."]
+position = Vector2(0, -88)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayeerChaseExitArea"]
+shape = SubResource("RectangleShape2D_k7d45")
 
 [node name="PlayerChaseArea" type="Area2D" parent="."]
 
@@ -214,11 +223,12 @@ target_position = Vector2(100, -80)
 target_position = Vector2(0, -80)
 
 [node name="Hand" type="Area2D" parent="Root"]
-position = Vector2(6, -2)
+position = Vector2(15, -2)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Root/Hand"]
 shape = SubResource("RectangleShape2D_ocnnu")
 
 [connection signal="timeout" from="FlashTimer" to="." method="_on_flash_timer_timeout"]
+[connection signal="area_exited" from="PlayeerChaseExitArea" to="." method="_on_player_chase_exit_area_area_exited"]
 [connection signal="area_entered" from="PlayerChaseArea" to="." method="_on_player_chase_area_area_entered"]
 [connection signal="animation_finished" from="Root/AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

@@ -18,6 +18,8 @@ const KNOCKBACK_FORCE_X: float = 10.0
 const KNOCKBACK_FORCE_Y: float = -30.0
 const KNOCKBACK_TIME: float = 0.7
 const IDLE_TIME: float = 1.0
+const HIT_TIME: float = 1.0
+const MAX_CHASE_BEFORE_ESCAPE: int = 3
 
 var accel: float = 200.0 
 var state: State = State.RANDOM
@@ -29,6 +31,10 @@ var health: float = MAX_HEALTH
 var need_new_target: bool = true
 var skipped_possible_jump: bool = false
 var idle_timer: float = IDLE_TIME
+var hit_timer: float = HIT_TIME
+var player_offset: float = 0.0
+var first_chase: bool = true
+var chase_count: int = 0
 
 @onready var flash_timer: Timer = $FlashTimer
 @onready var head: Marker2D = $Head
@@ -41,7 +47,14 @@ var idle_timer: float = IDLE_TIME
 func change_state(new_state: State) -> void:
 	last_state = state
 	state = new_state
-	if state == State.IDLE:
+	if state == State.CHASE:
+		if first_chase:
+			player_offset = randf_range(10, 50)
+			first_chase = false
+			chase_count = 0
+	elif state == State.HIT:
+		hit_timer = HIT_TIME
+	elif state == State.IDLE:
 		idle_timer = IDLE_TIME
 	elif state == State.RANDOM and need_new_target:
 		current_target_x = randf_range(Global.enemy_manager.world_limit_min, Global.enemy_manager.world_limit_max)
@@ -98,6 +111,8 @@ func _process(delta: float) -> void:
 	if state == State.DIE:
 		if velocity.y == 0:
 			sprite.play("die")
+	elif state == State.HIT:
+		sprite.play("hit")
 	elif velocity == Vector2.ZERO:
 		sprite.play("idle")
 	elif velocity.y != 0:
@@ -112,7 +127,9 @@ func _physics_process(delta: float) -> void:
 
 	if state == State.CHASE:
 		var player_position: Vector2 = Global.player_manager.player.global_position
-		velocity.x = global_position.direction_to(Vector2(player_position.x, global_position.y)).x * SPEED
+		var target_x: float = player_position.x + player_offset if global_position.x > player_position.x else player_position.x - player_offset
+
+		velocity.x = global_position.direction_to(Vector2(target_x, global_position.y)).x * SPEED
 		if obstacle_ray.is_colliding() and is_on_floor():
 			velocity.y = -300
 		if skipped_possible_jump and head_ray.is_colliding():
@@ -123,6 +140,25 @@ func _physics_process(delta: float) -> void:
 					change_state(State.JUMP)
 				else:
 					skipped_possible_jump = true
+		if abs(global_position.x - target_x) < Global.EPS:
+			velocity.x = 0
+			chase_count += 1
+			if chase_count == MAX_CHASE_BEFORE_ESCAPE:
+				#polisten kaçın
+				player_offset = randf_range(player_offset, 50.0)
+				change_state(State.HIT)
+			elif chase_count == MAX_CHASE_BEFORE_ESCAPE + 1:
+				chase_count = 0
+				#for keeping direction true
+				velocity.x = (player_position.x - global_position.x) * 0.05 
+				change_state(State.IDLE)
+			else:
+				player_offset = randf_range(10.0, player_offset)
+				change_state(State.HIT)
+	elif state == State.HIT:
+		hit_timer -= delta
+		if hit_timer < 0:
+			change_state(last_state)
 	elif state == State.DIE:
 		velocity.x = 0
 	elif state == State.RANDOM:
@@ -142,10 +178,11 @@ func _physics_process(delta: float) -> void:
 			change_state(State.IDLE)
 			velocity.x = 0
 	elif state == State.IDLE:
+		velocity.x = 0
 		idle_timer -= delta
 		if idle_timer < 0:
 			need_new_target = true
-			change_state(State.RANDOM)
+			change_state(last_state)
 	elif state == State.JUMP:
 		velocity.y = -500
 		if not optional_jump_ray.is_colliding() or head_ray.is_colliding():
@@ -173,7 +210,12 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 
 func _on_player_chase_area_area_entered(area: Area2D) -> void:
 	if not area.is_in_group("Player"): return
-	sprite.material.set_shader_parameter("flash_amount", 0.8)
-	sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 0.0, 0.0, 0.0))
-	flash_timer.start()
+	first_chase = true
 	change_state(State.CHASE)
+
+
+func _on_player_chase_exit_area_area_exited(area: Area2D) -> void:
+	if not area.is_in_group("Player"): return
+	if state in [State.CHASE, State.HIT]:
+		need_new_target = true
+		change_state(State.RANDOM)

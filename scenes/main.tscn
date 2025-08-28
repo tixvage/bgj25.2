@@ -30,7 +30,7 @@ limit = 5
 type = 1
 sound_effect = ExtResource("5_eb6dy")
 volume = 0
-pitch_scale = 1.0
+pitch_scale = 0.6
 pitch_randomness = 0.0
 metadata/_custom_type_script = "uid://d5tjmlelqgaf"
 
