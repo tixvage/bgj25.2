@@ -698,13 +698,12 @@ collision_layer = 2
 script = ExtResource("1_hym41")
 player_datas = Array[ExtResource("2_70cc3")]([SubResource("Resource_25m8j"), SubResource("Resource_4qpdp"), SubResource("Resource_n31jq")])
 
-[node name="MoveParticle" parent="Player" instance=ExtResource("11_33be7")]
-z_index = 50
-z_as_relative = false
-position = Vector2(0, 10)
-lifetime = 0.1
-
 [node name="Root" type="Node2D" parent="Player"]
+
+[node name="MoveParticle" parent="Player/Root" instance=ExtResource("11_33be7")]
+z_index = 50
+position = Vector2(-6, 10)
+lifetime = 0.15
 
 [node name="HandArea" type="Area2D" parent="Player/Root"]
 position = Vector2(7, 1)

@@ -13,7 +13,7 @@ const SHAKE_FORCE: float = 1.0
 
 @onready var root: Node2D = $Root
 #@onready var sprite: Sprite2D = $Root/Sprite2D
-@onready var move_particle: CPUParticles2D = $MoveParticle
+@onready var move_particle: CPUParticles2D = $Root/MoveParticle
 @onready var sprite: AnimatedSprite2D = $Root/AnimatedSprite2D
 @onready var hand_area: Area2D = $Root/HandArea
 @onready var dash_ray: RayCast2D = $DashRay
