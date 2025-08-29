@@ -20,10 +20,12 @@ const WEIGHT_ANIM_MAX: int = 8
 @onready var body_area: Area2D = $Body 
 @onready var root: Node2D = $Root
 #@onready var sprite: Sprite2D = $Root/Sprite2D
+@onready var stomach_area: Area2D = $Root/StomachArea
 @onready var feet_mid: Node2D = $Root/FeetMid
 @onready var move_particle: CPUParticles2D = $Root/MoveParticle
 @onready var sprite: AnimatedSprite2D = $Root/AnimatedSprite2D
 @onready var hand_area: Area2D = $Root/HandArea
+@onready var auto_jump_cast: RayCast2D = $Root/AutoJumpCast
 
 @onready var player_ghost_scene := preload("res://scenes/player_ghost.tscn")
 
@@ -50,7 +52,7 @@ func next_data() -> void:
 
 func _ready() -> void:
 	Global.player_manager.player = self
-	change_data(0)
+	change_data(3)
 	play_animation("idle")
 
 
@@ -73,6 +75,7 @@ func damage(xp_steal: float, projectile: bool = false) -> void:
 	shader_timer.start()
 	if projectile and anim != "dash_end":
 		chocolate_amount += 0.05
+		chocolate_amount = minf(chocolate_amount, 0.5)
 		sprite.material.set_shader_parameter("chocolate_amount", chocolate_amount)
 	else:
 		sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 0.0, 0.0, 1.0))
@@ -163,12 +166,24 @@ func _process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("fire") and can_hit:
 		play_animation("hit")
-		var bodies := hand_area.get_overlapping_areas()
-		for body in bodies:
-			if body.is_in_group("EnemyDash"):
-				body.get_parent().damage_hand(global_position, data.damage_amount)
-				Global.audio_manager.create_audio(SoundEffect.Type.HIT)
-				break
+		if data.extra_fat:
+			chocolate_amount = 0
+			sprite.material.set_shader_parameter("chocolate_amount", chocolate_amount)
+			var bodies := stomach_area.get_overlapping_areas()
+			var count: int = 0
+			for body in bodies:
+				if body.is_in_group("EnemyDash"):
+					body.get_parent().damage_from_up(sign(body.global_position.x - global_position.x) * 0.3, data.mass)
+					if count == 0:Global.audio_manager.create_audio(SoundEffect.Type.HIT)
+					count += 1
+		else:
+			var bodies := hand_area.get_overlapping_areas()
+			for body in bodies:
+				if body.is_in_group("EnemyDash"):
+					body.get_parent().damage_hand(global_position, data.damage_amount)
+					Global.audio_manager.create_audio(SoundEffect.Type.HIT)
+					break
+			
 
 	if Input.is_action_just_pressed("eat") and can_eat:
 		var eat_animations := ["river", "finger"]
@@ -183,15 +198,18 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	var on_floor := is_on_floor()
-	var can_jump: bool = coyote_timer > 0.0 and velocity.y >= 0 and not locked
+	var can_jump: bool = coyote_timer > 0.0 and velocity.y >= 0 and not data.extra_fat and not locked
 	if on_floor:
 		coyote_timer = coyote_time
 	else:
 		coyote_timer = max(coyote_timer - delta, 0.0)
-	var can_dash: bool = not on_floor and not dash_ray.is_colliding() and not locked
+	var can_dash: bool = not on_floor and not dash_ray.is_colliding() and not data.extra_fat and not locked
 	var can_move: bool = not is_dashing and not locked
 	var accel = ground_accel if on_floor else air_accel
 
+	var possible_jump_object := auto_jump_cast.get_collider()
+	if possible_jump_object and possible_jump_object.is_in_group("Ground"):
+		velocity.y = -100
 
 	if not on_floor:
 		velocity += get_gravity() * delta
@@ -244,6 +262,8 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 func _on_animated_sprite_2d_animation_changed() -> void:
 	var anim := get_animation()
 	if anim in ["dash_end", "river", "finger", "change"]:
+		locked = true
+	if anim in ["hit"] and data.extra_fat:
 		locked = true
 
 

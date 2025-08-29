@@ -1,4 +1,4 @@
-[gd_scene load_steps=108 format=3 uid="uid://x0rencevcxou"]
+[gd_scene load_steps=111 format=3 uid="uid://x0rencevcxou"]
 
 [ext_resource type="Texture2D" uid="uid://b01epv37djgnp" path="res://assets/sprite/biscuitlandrefined.png" id="1_8mspe"]
 [ext_resource type="Script" uid="uid://koo0xud6sagg" path="res://scripts/player.gd" id="1_hym41"]
@@ -74,6 +74,7 @@ damage_amount = 10.0
 mass = 7.0
 damage_area = Vector2(200, 20)
 required_xp_for_next = 150
+extra_fat = false
 metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 
 [sub_resource type="Resource" id="Resource_4qpdp"]
@@ -84,6 +85,7 @@ damage_amount = 20.0
 mass = 13.0
 damage_area = Vector2(250, 20)
 required_xp_for_next = 270
+extra_fat = false
 metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 
 [sub_resource type="Resource" id="Resource_n31jq"]
@@ -94,6 +96,7 @@ damage_amount = 30.0
 mass = 27.0
 damage_area = Vector2(300, 20)
 required_xp_for_next = 450
+extra_fat = false
 metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 
 [sub_resource type="Resource" id="Resource_w2ry6"]
@@ -104,7 +107,11 @@ damage_amount = 50.0
 mass = 50.0
 damage_area = Vector2(400, 20)
 required_xp_for_next = 600
+extra_fat = true
 metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_seb5k"]
+size = Vector2(50, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1464v"]
 size = Vector2(30, 30)
@@ -355,6 +362,14 @@ region = Rect2(0, 168, 24, 24)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ooovx"]
 atlas = ExtResource("17_w2ry6")
 region = Rect2(24, 168, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k1sfd"]
+atlas = ExtResource("17_w2ry6")
+region = Rect2(0, 144, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_17bs4"]
+atlas = ExtResource("17_w2ry6")
+region = Rect2(24, 144, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kaxu1"]
 atlas = ExtResource("8_4qpdp")
@@ -624,25 +639,25 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.8,
 "texture": SubResource("AtlasTexture_pnga1")
 }, {
-"duration": 1.0,
+"duration": 0.8,
 "texture": SubResource("AtlasTexture_tfhi2")
 }, {
-"duration": 1.0,
+"duration": 0.8,
 "texture": SubResource("AtlasTexture_5m3nn")
 }, {
-"duration": 1.0,
+"duration": 0.8,
 "texture": SubResource("AtlasTexture_1mlcr")
 }, {
-"duration": 1.0,
+"duration": 0.8,
 "texture": SubResource("AtlasTexture_px4aq")
 }, {
-"duration": 1.0,
+"duration": 0.8,
 "texture": SubResource("AtlasTexture_1mlcr")
 }, {
-"duration": 1.0,
+"duration": 0.8,
 "texture": SubResource("AtlasTexture_px4aq")
 }],
 "loop": false,
@@ -762,6 +777,17 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_k1sfd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_17bs4")
+}],
+"loop": false,
+"name": &"roll",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_kaxu1")
 }, {
 "duration": 1.0,
@@ -868,25 +894,25 @@ shape = SubResource("RectangleShape2D_ike0u")
 
 [node name="Ground" type="Node2D" parent="Map"]
 
-[node name="Ground1" type="StaticBody2D" parent="Map/Ground"]
+[node name="Ground1" type="StaticBody2D" parent="Map/Ground" groups=["Ground"]]
 position = Vector2(-646, 102)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Ground/Ground1"]
 shape = SubResource("RectangleShape2D_18r7x")
 
-[node name="Ground2" type="StaticBody2D" parent="Map/Ground"]
+[node name="Ground2" type="StaticBody2D" parent="Map/Ground" groups=["Ground"]]
 position = Vector2(-504, 106)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Ground/Ground2"]
 shape = SubResource("RectangleShape2D_8njo4")
 
-[node name="Ground3" type="StaticBody2D" parent="Map/Ground"]
+[node name="Ground3" type="StaticBody2D" parent="Map/Ground" groups=["Ground"]]
 position = Vector2(-364, 110)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Ground/Ground3"]
 shape = SubResource("RectangleShape2D_lws8g")
 
-[node name="Ground4" type="StaticBody2D" parent="Map/Ground"]
+[node name="Ground4" type="StaticBody2D" parent="Map/Ground" groups=["Ground"]]
 position = Vector2(214, 114)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Ground/Ground4"]
@@ -941,6 +967,12 @@ player_datas = Array[ExtResource("2_70cc3")]([SubResource("Resource_25m8j"), Sub
 
 [node name="Root" type="Node2D" parent="Player"]
 
+[node name="StomachArea" type="Area2D" parent="Player/Root"]
+position = Vector2(29, 4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Root/StomachArea"]
+shape = SubResource("RectangleShape2D_seb5k")
+
 [node name="FeetMid" type="Node2D" parent="Player/Root"]
 visible = false
 position = Vector2(-1, 20)
@@ -966,9 +998,11 @@ shape = SubResource("RectangleShape2D_1464v")
 material = SubResource("ShaderMaterial_ll1pc")
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_1464v")
-animation = &"idle_1"
-frame = 1
-frame_progress = 1.0
+animation = &"jump_1"
+
+[node name="AutoJumpCast" type="RayCast2D" parent="Player/Root"]
+position = Vector2(0, 21)
+target_position = Vector2(20, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 visible = false

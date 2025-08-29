@@ -4,7 +4,7 @@ uniform vec4 flash_light = vec4(1);
 uniform float flash_amount = 0.0;
 
 uniform float seed = 0;
-uniform float chocolate_amount : hint_range(0.0, 1.0) = 0.1;
+uniform float chocolate_amount : hint_range(0.0, 0.5) = 0.1;
 uniform vec4 chocolate_color : source_color = vec4(0.36, 0.20, 0.09, 1.0);
 
 

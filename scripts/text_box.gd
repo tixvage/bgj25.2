@@ -54,7 +54,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("text_read"):
 		if text_running:
 			speeding_up = true
-		else:
+		elif visible:
 			disable_dialog()
 	var speed = SKIP_SPEED if speeding_up else DEFAULT_SPEED
 	if text_running:

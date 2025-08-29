@@ -32,6 +32,7 @@ window/stretch/mode="canvas_items"
 EnemyDash=""
 Player=""
 EnemyDead=""
+Ground=""
 
 [input]
 
