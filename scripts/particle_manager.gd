@@ -9,6 +9,7 @@ func _ready() -> void:
 
 func spawn(type: Particle.Type, spawn_position: Vector2, child: Node2D = null) -> void:
 	var particle_instance = spawner.particle_dict[type].scene.instantiate()
+	particle_instance.finished.connect(particle_instance.queue_free)
 	particle_instance.emitting = true
 	var pool = child if child else spawner.pool
 	pool.add_child(particle_instance)
