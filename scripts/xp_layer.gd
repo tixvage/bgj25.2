@@ -4,7 +4,7 @@ extends CanvasLayer
 @onready var container: VBoxContainer = $TextureRect/MarginContainer/VBoxContainer
 @export var cookie_scene: Resource
 
-const MAX_COOKIE_COUNT: float = 6.0
+const MAX_COOKIE_COUNT: float = 10.0
 
 
 func update_xp(xp: float, required_xp: float) -> void:

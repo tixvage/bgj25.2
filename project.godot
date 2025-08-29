@@ -33,6 +33,7 @@ EnemyDash=""
 Player=""
 EnemyDead=""
 Ground=""
+Jar=""
 
 [input]
 

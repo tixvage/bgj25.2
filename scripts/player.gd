@@ -10,14 +10,15 @@ class_name Player
 const DASH_FORCE: float = 90.0
 const DASH_LIMIT: float = 150.0
 const SHAKE_FORCE: float = 1.0
-const WEIGHT_ANIM_MAX: int = 8
+const WEIGHT_ANIM_MAX: int = 12
 
 @onready var shader_timer: Timer = $ShaderTimer
 @onready var dash_ray: RayCast2D = $DashRay
 @onready var ghost_spawn_timer: Timer = $GhostSpawnTimer
 @onready var dash_damage_area: Area2D = $DashDamageArea
 @onready var dash_damage_collision: CollisionShape2D = $DashDamageArea/CollisionShape2D
-@onready var body_area: Area2D = $Body 
+@onready var body_area: Area2D = $Body
+@onready var roll_area: Area2D = $RollArea
 @onready var root: Node2D = $Root
 #@onready var sprite: Sprite2D = $Root/Sprite2D
 @onready var stomach_area: Area2D = $Root/StomachArea
@@ -50,9 +51,17 @@ func next_data() -> void:
 	current_data += 1
 
 
+func previous_data() -> void:
+	chocolate_amount = 0
+	sprite.material.set_shader_parameter("chocolate_amount", chocolate_amount)
+	current_data -= 1
+	xp = data.required_xp_for_next - 20
+
+
 func _ready() -> void:
 	Global.player_manager.player = self
 	change_data(3)
+	add_xp(50)
 	play_animation("idle")
 
 
@@ -83,6 +92,17 @@ func damage(xp_steal: float, projectile: bool = false) -> void:
 	Global.camera_manager.shake(SHAKE_FORCE * 0.6, 10)
 
 
+func get_skinny():
+	Global.enemy_manager.lock = true
+	weight_change = true
+	shader_timer.stop()
+	shader_timer.start()
+	sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 1.0, 1.0, 1.0))
+	sprite.material.set_shader_parameter("flash_amount", 0.7)
+	previous_data()
+	play_animation("change")
+
+
 func get_fat():
 	Global.enemy_manager.lock = true
 	weight_change = true
@@ -96,10 +116,12 @@ func get_fat():
 
 func add_xp(amount: float) -> void:
 	xp += amount
-	xp = min(xp, data.required_xp_for_next)
+	xp = clamp(xp, 0.0, data.required_xp_for_next)
 	Global.stat_manager.update_xp(xp, data.required_xp_for_next)
 	if xp == data.required_xp_for_next:
 		get_fat()
+	elif xp == 0.0:
+		get_skinny()
 
 
 func get_current_data() -> PlayerData:
@@ -151,7 +173,7 @@ func _process(delta: float) -> void:
 	if velocity.x != 0: root.scale.x = 1 if velocity.x > 0 else -1
 
 	var anim := get_animation()
-	if not anim in ["hit", "dash_end", "finger", "river", "change"]:
+	if not anim in ["hit", "dash_end", "finger", "river", "change", "roll"]:
 		if is_dashing:
 			play_animation("dash_start")
 		if velocity == Vector2.ZERO:
@@ -173,7 +195,7 @@ func _process(delta: float) -> void:
 			var count: int = 0
 			for body in bodies:
 				if body.is_in_group("EnemyDash"):
-					body.get_parent().damage_from_up(sign(body.global_position.x - global_position.x) * 0.3, data.mass)
+					body.get_parent().damage_from_up(sign(body.global_position.x - global_position.x) * 0.3, data.mass, data.damage_amount)
 					if count == 0:Global.audio_manager.create_audio(SoundEffect.Type.HIT)
 					count += 1
 		else:
@@ -203,8 +225,13 @@ func _physics_process(delta: float) -> void:
 		coyote_timer = coyote_time
 	else:
 		coyote_timer = max(coyote_timer - delta, 0.0)
-	var can_dash: bool = not on_floor and not dash_ray.is_colliding() and not data.extra_fat and not locked
+	var can_dash: bool = (not on_floor and not dash_ray.is_colliding()
+						  and not data.extra_fat and not locked) \
+						  or data.extra_fat
 	var can_move: bool = not is_dashing and not locked
+	var anim := get_animation()
+	var can_roll: bool = anim in ["roll"] and data.extra_fat
+
 	var accel = ground_accel if on_floor else air_accel
 
 	var possible_jump_object := auto_jump_cast.get_collider()
@@ -215,7 +242,11 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 
 	if Input.is_action_just_pressed("move_down") and can_dash:
-		start_dash()
+		if data.extra_fat:
+			play_animation("roll")
+			print("i likes tos")
+		else:
+			start_dash()
 
 	if on_floor and is_dashing:
 		stop_dash()
@@ -229,6 +260,20 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("move_up") and can_jump:
 		velocity.y = -data.jump_force
+
+	if can_roll:
+		var bodies := roll_area.get_overlapping_bodies()
+		for body in bodies:
+			if body.is_in_group("Jar"):
+				#bruh
+				var jar_sprite: AnimatedSprite2D = body.get_child(0)
+				var jar_collision: CollisionShape2D = body.get_child(1)
+				#bruh end
+				jar_collision.disabled = true
+				jar_sprite.play("crack")
+				jar_sprite.animation_finished.connect(body.queue_free)
+				break
+		velocity.x = 300.0 * root.scale.x
 
 	var direction := Input.get_axis("move_left", "move_right") if can_move else 0.0
 	move_particle.emitting = velocity.x != 0.0 and on_floor
@@ -255,7 +300,7 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 	locked = false
 	if anim in ["change"]:
 		add_xp(0)
-	if anim in ["hit", "dash_end", "river", "finger", "change"]:
+	if anim in ["hit", "dash_end", "river", "finger", "change", "roll"]:
 		play_animation("idle")
 
 
@@ -263,7 +308,7 @@ func _on_animated_sprite_2d_animation_changed() -> void:
 	var anim := get_animation()
 	if anim in ["dash_end", "river", "finger", "change"]:
 		locked = true
-	if anim in ["hit"] and data.extra_fat:
+	if anim in ["hit", "roll"] and data.extra_fat:
 		locked = true
 
 

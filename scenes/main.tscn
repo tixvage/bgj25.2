@@ -107,8 +107,8 @@ script = ExtResource("6_tefeu")
 
 [node name="EnemyManager" type="Node" parent="."]
 script = ExtResource("7_85g3d")
-world_limit_min = -100.0
-world_limit_max = 1000.0
+world_limit_min = -715.0
+world_limit_max = 715.0
 
 [node name="PlayerManager" type="Node" parent="."]
 script = ExtResource("8_choun")

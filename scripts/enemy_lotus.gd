@@ -99,7 +99,7 @@ func damage(amount: float, up: bool) -> void:
 			sprite.material.set_shader_parameter("line_scale", 1.0)
 
 
-func damage_from_up(raw_nearness: float, mass: float) -> void:
+func damage_from_up(raw_nearness: float, mass: float, direct_damage: float = 0.0) -> void:
 	if state in [State.DIE, State.WAIT_FOR_EAT]: return
 	var nearness: float = absf(raw_nearness)
 	apply_knockback(
@@ -109,7 +109,7 @@ func damage_from_up(raw_nearness: float, mass: float) -> void:
 			nearness * mass * KNOCKBACK_FORCE_Y * Global.rng.randf_range(0.8, 1.2),
 		)
 	)
-	var damage_amount: float = mass * nearness * 2
+	var damage_amount: float = mass * nearness * 2 if direct_damage == 0.0 else direct_damage
 	damage(damage_amount, true)
 
 
@@ -167,6 +167,8 @@ func _physics_process(delta: float) -> void:
 	if state == State.CHASE:
 		var player_position: Vector2 = Global.player_manager.player.global_position
 		var target_x: float = player_position.x + player_offset if global_position.x > player_position.x else player_position.x - player_offset
+
+		target_x = clampf(target_x, Global.enemy_manager.world_limit_min, Global.enemy_manager.world_limit_max)
 
 		velocity.x = global_position.direction_to(Vector2(target_x, global_position.y)).x * SPEED
 		if obstacle_ray.is_colliding() and is_on_floor():
