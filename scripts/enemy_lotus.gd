@@ -257,6 +257,7 @@ func _on_flash_timer_timeout() -> void:
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if sprite.animation == "die":
 		$DeadArea/CollisionShape2D.disabled = false
+		$DashHurtArea/CollisionShape2D.disabled = true
 		change_state(State.WAIT_FOR_EAT)
 
 

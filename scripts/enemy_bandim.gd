@@ -23,8 +23,8 @@ const FIRE_ANIM_TIME: float = 1.0
 const FIRE_TIME: float = FIRE_ANIM_TIME / 5.0
 const MAX_FIRE: float = 10.0
 const MAX_CHASE_BEFORE_ESCAPE: int = 3
-const CHASE_LIMIT_MAX: float = 200.0
-const CHASE_LIMIT_MIN: float = 100.0
+const CHASE_LIMIT_MAX: float = 150.0
+const CHASE_LIMIT_MIN: float = 50.0
 
 var accel: float = 200.0 
 var state: State = State.RANDOM
@@ -93,10 +93,7 @@ func damage(amount: float, up: bool) -> void:
 		sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 0.0, 0.0, 1.0))
 	else:
 		flash_timer.start()
-		if up:
-			sprite.material.set_shader_parameter("flash_amount", 0.8)
-		else:
-			sprite.material.set_shader_parameter("line_scale", 1.0)
+		sprite.material.set_shader_parameter("flash_amount", 0.8)
 
 
 func damage_from_up(raw_nearness: float, mass: float) -> void:
@@ -237,7 +234,7 @@ func _physics_process(delta: float) -> void:
 			velocity.x = knockback.x
 			if knockback_timer <= 0.0:
 				knockback.x = 0.0
-				change_state(State.RANDOM)
+				change_state(last_state)
 
 	move_and_slide()
 
@@ -251,6 +248,7 @@ func _on_flash_timer_timeout() -> void:
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if sprite.animation == "die":
 		$DeadArea/CollisionShape2D.disabled = false
+		$DashHurtArea/CollisionShape2D.disabled = true
 		change_state(State.WAIT_FOR_EAT)
 
 

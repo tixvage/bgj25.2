@@ -192,7 +192,7 @@ script = ExtResource("1_en8ch")
 data = SubResource("Resource_qliqa")
 
 [node name="Head" type="Marker2D" parent="."]
-position = Vector2(-1, -10)
+position = Vector2(-1, -46)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_1464v")

@@ -16,7 +16,7 @@ metadata/_custom_type_script = "uid://cper3rsha37eo"
 size = Vector2(16, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t0s01"]
-size = Vector2(400, 200)
+size = Vector2(400, 300)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wjy0h"]
 size = Vector2(300, 24)
@@ -27,7 +27,7 @@ shader = ExtResource("3_wjy0h")
 shader_parameter/flash_light = Vector4(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
 shader_parameter/seed = 0.0
-shader_parameter/chocolate_amount = 0.1
+shader_parameter/chocolate_amount = 0.0
 shader_parameter/chocolate_color = Color(0.36, 0.2, 0.09, 1)
 shader_parameter/line_color = Vector4(1, 1, 1, 1)
 shader_parameter/line_scale = 0.0
@@ -168,12 +168,14 @@ script = ExtResource("1_pwmgu")
 data = SubResource("Resource_78ggm")
 
 [node name="Head" type="Marker2D" parent="."]
-position = Vector2(0, -11)
+position = Vector2(0, -41)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_nq4ng")
 
 [node name="DashHurtArea" type="Area2D" parent="." groups=["EnemyDash"]]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DashHurtArea"]
 shape = SubResource("RectangleShape2D_nq4ng")
@@ -183,12 +185,14 @@ wait_time = 0.3
 one_shot = true
 
 [node name="PlayerChaseExitArea" type="Area2D" parent="."]
+visible = false
 position = Vector2(0, -41)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerChaseExitArea"]
 shape = SubResource("RectangleShape2D_t0s01")
 
 [node name="PlayerChaseArea" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerChaseArea"]
 shape = SubResource("RectangleShape2D_wjy0h")
@@ -215,6 +219,7 @@ target_position = Vector2(0, -80)
 position = Vector2(6, -4)
 
 [node name="DeadArea" type="Area2D" parent="." groups=["EnemyDead"]]
+visible = false
 position = Vector2(3, 6)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DeadArea"]
