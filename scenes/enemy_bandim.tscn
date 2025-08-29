@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dvag253a51pco"]
+[gd_scene load_steps=25 format=3 uid="uid://dvag253a51pco"]
 
 [ext_resource type="Texture2D" uid="uid://bj4hwbgo3tnmi" path="res://assets/sprite/bandim.png" id="1_6n4i8"]
 [ext_resource type="Script" uid="uid://c7txa37pqv7mr" path="res://scripts/enemy_bandim.gd" id="1_pwmgu"]
@@ -15,14 +15,20 @@ metadata/_custom_type_script = "uid://cper3rsha37eo"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nq4ng"]
 size = Vector2(16, 24)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t0s01"]
+size = Vector2(400, 200)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wjy0h"]
-size = Vector2(100, 24)
+size = Vector2(300, 24)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t0s01"]
 resource_local_to_scene = true
 shader = ExtResource("3_wjy0h")
 shader_parameter/flash_light = Vector4(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
+shader_parameter/seed = 0.0
+shader_parameter/chocolate_amount = 0.1
+shader_parameter/chocolate_color = Color(0.36, 0.2, 0.09, 1)
 shader_parameter/line_color = Vector4(1, 1, 1, 1)
 shader_parameter/line_scale = 0.0
 
@@ -86,12 +92,17 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_6n5yo")
+}],
+"loop": false,
+"name": &"die",
+"speed": 5.0
 }, {
+"frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_wr1in")
 }],
 "loop": false,
-"name": &"die",
+"name": &"die_wait",
 "speed": 5.0
 }, {
 "frames": [{
@@ -148,10 +159,16 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aclem"]
+size = Vector2(32, 12)
+
 [node name="EnemyBandim" type="CharacterBody2D"]
 collision_layer = 4
 script = ExtResource("1_pwmgu")
 data = SubResource("Resource_78ggm")
+
+[node name="Head" type="Marker2D" parent="."]
+position = Vector2(0, -11)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_nq4ng")
@@ -165,6 +182,12 @@ shape = SubResource("RectangleShape2D_nq4ng")
 wait_time = 0.3
 one_shot = true
 
+[node name="PlayerChaseExitArea" type="Area2D" parent="."]
+position = Vector2(0, -41)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerChaseExitArea"]
+shape = SubResource("RectangleShape2D_t0s01")
+
 [node name="PlayerChaseArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerChaseArea"]
@@ -176,7 +199,7 @@ position = Vector2(4, 0)
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Root"]
 material = SubResource("ShaderMaterial_t0s01")
 sprite_frames = SubResource("SpriteFrames_nq4ng")
-animation = &"run"
+animation = &"die_wait"
 
 [node name="ObstacleRay" type="RayCast2D" parent="Root"]
 position = Vector2(0, 9)
@@ -188,5 +211,16 @@ target_position = Vector2(100, -80)
 [node name="HeadRay" type="RayCast2D" parent="Root"]
 target_position = Vector2(0, -80)
 
+[node name="Trunk" type="Marker2D" parent="Root"]
+position = Vector2(6, -4)
+
+[node name="DeadArea" type="Area2D" parent="." groups=["EnemyDead"]]
+position = Vector2(3, 6)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeadArea"]
+shape = SubResource("RectangleShape2D_aclem")
+
 [connection signal="timeout" from="FlashTimer" to="." method="_on_flash_timer_timeout"]
+[connection signal="area_exited" from="PlayerChaseExitArea" to="." method="_on_player_chase_exit_area_area_exited"]
+[connection signal="area_entered" from="PlayerChaseArea" to="." method="_on_player_chase_area_area_entered"]
 [connection signal="animation_finished" from="Root/AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

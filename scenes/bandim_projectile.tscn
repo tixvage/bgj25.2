@@ -1,0 +1,55 @@
+[gd_scene load_steps=9 format=3 uid="uid://dthdklvf1d3kn"]
+
+[ext_resource type="Texture2D" uid="uid://dewote71u5qx5" path="res://assets/sprite/choco sos.png" id="1_6jksa"]
+[ext_resource type="Script" uid="uid://cclhijev0sesa" path="res://scripts/bandim_projectile.gd" id="1_drvv3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_drvv3"]
+atlas = ExtResource("1_6jksa")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xlrb7"]
+atlas = ExtResource("1_6jksa")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tmxa8"]
+atlas = ExtResource("1_6jksa")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q8bk8"]
+atlas = ExtResource("1_6jksa")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_grf0x"]
+animations = [{
+"frames": [{
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_drvv3")
+}, {
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_xlrb7")
+}, {
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_tmxa8")
+}, {
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_q8bk8")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6jksa"]
+size = Vector2(18, 10)
+
+[node name="BandimProjectile" type="Area2D"]
+script = ExtResource("1_drvv3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_grf0x")
+frame_progress = 0.0361913
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_6jksa")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

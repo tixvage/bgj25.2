@@ -7,6 +7,7 @@ var camera_manager: CameraManager
 var enemy_manager: EnemyManager
 var player_manager: PlayerManager
 var particle_manager: ParticleManager
+var projectile_manager: ProjectileManager
 var stat_manager: StatManager
 var world_viewport: SubViewportContainer
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()

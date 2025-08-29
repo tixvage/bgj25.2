@@ -36,12 +36,15 @@ var coyote_timer: float = 0.0
 var locked: bool = false
 var weight_change: bool = false
 var weight_anim_count: int = 0
+var chocolate_amount: float = 0.0
 
 var data: PlayerData : get = get_current_data 
 
 
 func next_data() -> void:
 	xp = 0
+	chocolate_amount = 0
+	sprite.material.set_shader_parameter("chocolate_amount", chocolate_amount)
 	current_data += 1
 
 
@@ -64,11 +67,16 @@ func change_data(new_data: int) -> void:
 	dash_damage_collision.shape.size = data.damage_area
 
 
-func damage(xp_steal: float) -> void:
+func damage(xp_steal: float, projectile: bool = false) -> void:
 	add_xp(-xp_steal)
+	var anim := get_animation()
 	shader_timer.start()
-	sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 0.0, 0.0, 1.0))
-	sprite.material.set_shader_parameter("flash_amount", 0.9)
+	if projectile and anim != "dash_end":
+		chocolate_amount += 0.05
+		sprite.material.set_shader_parameter("chocolate_amount", chocolate_amount)
+	else:
+		sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 0.0, 0.0, 1.0))
+		sprite.material.set_shader_parameter("flash_amount", 0.7)
 	Global.camera_manager.shake(SHAKE_FORCE * 0.6, 10)
 
 
@@ -111,6 +119,10 @@ func start_dash() -> void:
 
 
 func stop_dash() -> void:
+	shader_timer.start()
+	chocolate_amount = 0.0
+	sprite.material.set_shader_parameter("chocolate_amount", chocolate_amount)
+
 	play_animation("dash_end")
 	is_dashing = false
 	dash_distance = position.y - dash_distance

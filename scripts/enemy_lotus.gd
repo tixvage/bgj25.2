@@ -23,6 +23,8 @@ const HIT_ANIM_TIME: float = 1.0
 const HIT_TIME: float = HIT_ANIM_TIME / 5.0
 const MAX_HIT: float = 10.0
 const MAX_CHASE_BEFORE_ESCAPE: int = 3
+const CHASE_LIMIT_MAX: float = 50.0
+const CHASE_LIMIT_MIN: float = 10.0
 
 var accel: float = 200.0 
 var state: State = State.RANDOM
@@ -57,7 +59,7 @@ func change_state(new_state: State) -> void:
 	state = new_state
 	if state == State.CHASE:
 		if first_chase:
-			player_offset = randf_range(10, 50)
+			player_offset = randf_range(CHASE_LIMIT_MIN, CHASE_LIMIT_MAX)
 			first_chase = false
 			chase_count = 0
 	elif state == State.HIT:
@@ -113,7 +115,7 @@ func damage_from_up(raw_nearness: float, mass: float) -> void:
 
 func damage_hand(location: Vector2, amount: float) -> void:
 	if state in [State.DIE, State.WAIT_FOR_EAT]: return
-	player_offset = randf_range(player_offset, 50.0)
+	player_offset = randf_range(player_offset, CHASE_LIMIT_MAX)
 	chase_count = MAX_CHASE_BEFORE_ESCAPE - 1
 	change_state(State.CHASE)
 	#apply_knockback(
@@ -182,7 +184,7 @@ func _physics_process(delta: float) -> void:
 			chase_count += 1
 			if chase_count == MAX_CHASE_BEFORE_ESCAPE:
 				#polisten kaçın
-				player_offset = randf_range(player_offset, 50.0)
+				player_offset = randf_range(player_offset, CHASE_LIMIT_MAX)
 				change_state(State.HIT)
 			elif chase_count == MAX_CHASE_BEFORE_ESCAPE + 1:
 				chase_count = 0
@@ -190,7 +192,7 @@ func _physics_process(delta: float) -> void:
 				velocity.x = (player_position.x - global_position.x) * 0.05 
 				change_state(State.IDLE)
 			else:
-				player_offset = randf_range(10.0, player_offset)
+				player_offset = randf_range(CHASE_LIMIT_MIN, player_offset)
 				change_state(State.HIT)
 	elif state == State.HIT:
 		hit_anim_timer -= delta

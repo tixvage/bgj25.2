@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://c8q2wjwagov8h"]
+[gd_scene load_steps=28 format=3 uid="uid://c8q2wjwagov8h"]
 
 [ext_resource type="Script" uid="uid://cil73ed5tu74" path="res://scripts/scene_manager.gd" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://dy8vpfa4appfu" path="res://scripts/audio_manager.gd" id="2_0wfyh"]
@@ -16,6 +16,9 @@
 [ext_resource type="Script" uid="uid://vj0vjbu8pq5r" path="res://scripts/particle_manager.gd" id="9_ya4ey"]
 [ext_resource type="Script" uid="uid://di3bbgxr1nblb" path="res://scripts/stat_manager.gd" id="13_jbj1t"]
 [ext_resource type="PackedScene" uid="uid://cl7nm38kki82n" path="res://scenes/xp_layer.tscn" id="14_jkv2x"]
+[ext_resource type="Script" uid="uid://bxfygrl2at6dk" path="res://scripts/projectile_manager.gd" id="14_muem4"]
+[ext_resource type="Script" uid="uid://dtkfhkhrr07r6" path="res://scripts/projectile.gd" id="15_0ld40"]
+[ext_resource type="PackedScene" uid="uid://dthdklvf1d3kn" path="res://scenes/bandim_projectile.tscn" id="16_gqmmt"]
 
 [sub_resource type="Resource" id="Resource_jyhfs"]
 script = ExtResource("3_sugp2")
@@ -77,6 +80,12 @@ pitch_scale = 1.0
 pitch_randomness = 0.0
 metadata/_custom_type_script = "uid://d5tjmlelqgaf"
 
+[sub_resource type="Resource" id="Resource_yc10j"]
+script = ExtResource("15_0ld40")
+scene = ExtResource("16_gqmmt")
+type = 0
+metadata/_custom_type_script = "uid://dtkfhkhrr07r6"
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tipki"]
 shader = ExtResource("7_o6xl0")
 shader_parameter/cam_offset = Vector2(0, 0)
@@ -109,6 +118,10 @@ script = ExtResource("9_ya4ey")
 
 [node name="StatManager" type="Node" parent="."]
 script = ExtResource("13_jbj1t")
+
+[node name="ProjectileManager" type="Node" parent="."]
+script = ExtResource("14_muem4")
+projectiles = Array[ExtResource("15_0ld40")]([SubResource("Resource_yc10j")])
 
 [node name="GUI" type="Control" parent="."]
 unique_name_in_owner = true

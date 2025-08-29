@@ -29,6 +29,9 @@ resource_local_to_scene = true
 shader = ExtResource("3_gqwvd")
 shader_parameter/flash_light = Vector4(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
+shader_parameter/seed = 0.0
+shader_parameter/chocolate_amount = 0.1
+shader_parameter/chocolate_color = Color(0.36, 0.2, 0.09, 1)
 shader_parameter/line_color = Vector4(1, 1, 1, 1)
 shader_parameter/line_scale = 0.0
 
@@ -220,7 +223,7 @@ shape = SubResource("RectangleShape2D_qliqa")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Root"]
 material = SubResource("ShaderMaterial_gqwvd")
 sprite_frames = SubResource("SpriteFrames_cyj6w")
-animation = &"die_wait"
+animation = &"die"
 
 [node name="ObstacleRay" type="RayCast2D" parent="Root"]
 position = Vector2(0, 9)
