@@ -197,7 +197,7 @@ func _physics_process(delta: float) -> void:
 		fire_timer -= delta
 		if fire_timer < 0:
 			fire_timer = FIRE_TIME
-			Global.projectile_manager.spawn(Projectile.Type.BANDIM, trunk.global_position, Vector2(player_position.x - trunk.global_position.x, 0).normalized(), data)
+			Global.projectile_manager.spawn(Projectile.Type.BANDIM, trunk.global_position, (player_position - trunk.global_position).normalized(), data)
 		if fire_anim_timer < 0:
 			change_state(State.CHASE)
 	elif state == State.DIE:

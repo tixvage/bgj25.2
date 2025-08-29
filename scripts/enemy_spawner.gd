@@ -38,4 +38,4 @@ func _process(delta: float) -> void:
 		random_spawn_timer -= delta
 	else:
 		random_spawn_timer = random_spawn_time
-		spawn_enemy_type(EnemySpawner.Type.BANDIM)#Global.rng.randi() % 2)
+		spawn_enemy_type(Global.rng.randi() % 2)
