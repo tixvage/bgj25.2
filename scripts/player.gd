@@ -11,6 +11,8 @@ const DASH_FORCE: float = 90.0
 const DASH_LIMIT: float = 150.0
 const SHAKE_FORCE: float = 1.0
 const WEIGHT_ANIM_MAX: int = 12
+const ROLL_PARTICLE_TIME: float = 0.02
+
 
 @onready var shader_timer: Timer = $ShaderTimer
 @onready var dash_ray: RayCast2D = $DashRay
@@ -40,6 +42,7 @@ var locked: bool = false
 var weight_change: bool = false
 var weight_anim_count: int = 0
 var chocolate_amount: float = 0.0
+var roll_particle_timer: float = 0.0
 
 var data: PlayerData : get = get_current_data 
 
@@ -244,7 +247,6 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("move_down") and can_dash:
 		if data.extra_fat:
 			play_animation("roll")
-			print("i likes tos")
 		else:
 			start_dash()
 
@@ -273,7 +275,16 @@ func _physics_process(delta: float) -> void:
 				jar_sprite.play("crack")
 				jar_sprite.animation_finished.connect(body.queue_free)
 				break
+		var areas := roll_area.get_overlapping_areas()
+		for area in areas:
+			if area.is_in_group("EnemyDash"):
+				area.get_parent().damage_from_up(sign(area.global_position.x - global_position.x) * 0.3, data.mass, data.damage_amount)
+
 		velocity.x = 300.0 * root.scale.x
+		roll_particle_timer -= delta
+		if roll_particle_timer <= 0.0:
+			Global.particle_manager.spawn(Particle.Type.JUMP_END, feet_mid.global_position)
+			roll_particle_timer = ROLL_PARTICLE_TIME
 
 	var direction := Input.get_axis("move_left", "move_right") if can_move else 0.0
 	move_particle.emitting = velocity.x != 0.0 and on_floor

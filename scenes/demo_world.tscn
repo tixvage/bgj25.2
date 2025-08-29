@@ -1,4 +1,4 @@
-[gd_scene load_steps=122 format=3 uid="uid://x0rencevcxou"]
+[gd_scene load_steps=123 format=3 uid="uid://x0rencevcxou"]
 
 [ext_resource type="Texture2D" uid="uid://b01epv37djgnp" path="res://assets/sprite/biscuitlandrefined.png" id="1_8mspe"]
 [ext_resource type="Script" uid="uid://koo0xud6sagg" path="res://scripts/player.gd" id="1_hym41"]
@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://f8k4ilqwn418" path="res://particles/move.tscn" id="11_33be7"]
 [ext_resource type="Shader" uid="uid://wykxxfv30sal" path="res://shaders/flash.gdshader" id="13_jgk0q"]
 [ext_resource type="Texture2D" uid="uid://derygaq2a35u" path="res://assets/sprite/biscuithunter4.png" id="17_w2ry6"]
+[ext_resource type="Texture2D" uid="uid://bgats4cscu76l" path="res://assets/sprite/biscuithunter4rollfix.png" id="19_8mspe"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_w2ry6"]
 normal = Vector2(1, 0)
@@ -422,11 +423,11 @@ atlas = ExtResource("17_w2ry6")
 region = Rect2(24, 168, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k1sfd"]
-atlas = ExtResource("17_w2ry6")
+atlas = ExtResource("19_8mspe")
 region = Rect2(0, 144, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_17bs4"]
-atlas = ExtResource("17_w2ry6")
+atlas = ExtResource("19_8mspe")
 region = Rect2(24, 144, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kaxu1"]
@@ -942,49 +943,42 @@ position = Vector2(-576, 24)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Platforms/Platform1"]
 shape = SubResource("RectangleShape2D_w2ry6")
-one_way_collision = true
 
 [node name="Platform2" type="StaticBody2D" parent="Map/Platforms"]
 position = Vector2(-368, 24)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Platforms/Platform2"]
 shape = SubResource("RectangleShape2D_w2ry6")
-one_way_collision = true
 
 [node name="Platform3" type="StaticBody2D" parent="Map/Platforms"]
 position = Vector2(-480, -48)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Platforms/Platform3"]
 shape = SubResource("RectangleShape2D_w7j4q")
-one_way_collision = true
 
 [node name="Platform4" type="StaticBody2D" parent="Map/Platforms"]
 position = Vector2(-296, -56)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Platforms/Platform4"]
 shape = SubResource("RectangleShape2D_8mspe")
-one_way_collision = true
 
 [node name="Platform5" type="StaticBody2D" parent="Map/Platforms"]
 position = Vector2(-136, -68)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Platforms/Platform5"]
 shape = SubResource("RectangleShape2D_sane6")
-one_way_collision = true
 
 [node name="Platform6" type="StaticBody2D" parent="Map/Platforms"]
 position = Vector2(46, -68)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Platforms/Platform6"]
 shape = SubResource("RectangleShape2D_2wp0k")
-one_way_collision = true
 
 [node name="Platform7" type="StaticBody2D" parent="Map/Platforms"]
 position = Vector2(-40, 30)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map/Platforms/Platform7"]
 shape = SubResource("RectangleShape2D_ike0u")
-one_way_collision = true
 
 [node name="Ground" type="Node2D" parent="Map"]
 
@@ -1106,6 +1100,7 @@ material = SubResource("ShaderMaterial_ll1pc")
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_1464v")
 animation = &"roll_4"
+frame_progress = 1.0
 
 [node name="AutoJumpCast" type="RayCast2D" parent="Player/Root"]
 position = Vector2(0, 21)
