@@ -19,6 +19,7 @@
 [ext_resource type="Shader" uid="uid://wykxxfv30sal" path="res://shaders/flash.gdshader" id="13_jgk0q"]
 [ext_resource type="Texture2D" uid="uid://derygaq2a35u" path="res://assets/sprite/biscuithunter4.png" id="17_w2ry6"]
 [ext_resource type="Texture2D" uid="uid://bgats4cscu76l" path="res://assets/sprite/biscuithunter4rollfix.png" id="19_8mspe"]
+[ext_resource type="Texture2D" uid="uid://hov1pitron8w" path="res://assets/sprite/1x1_#000000FF.png" id="20_sane6"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_w2ry6"]
 normal = Vector2(1, 0)
@@ -132,7 +133,7 @@ metadata/_custom_type_script = "uid://oovhr5r2b6c5"
 script = ExtResource("2_70cc3")
 move_speed = 300.0
 jump_force = 350.0
-damage_amount = 20.0
+damage_amount = 100.0
 mass = 7.0
 damage_area = Vector2(200, 20)
 required_xp_for_next = 150
@@ -143,7 +144,7 @@ metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 script = ExtResource("2_70cc3")
 move_speed = 250.0
 jump_force = 320.0
-damage_amount = 34.0
+damage_amount = 100.0
 mass = 13.0
 damage_area = Vector2(250, 20)
 required_xp_for_next = 270
@@ -154,7 +155,7 @@ metadata/_custom_type_script = "uid://bfj6hq6gj25hm"
 script = ExtResource("2_70cc3")
 move_speed = 200.0
 jump_force = 300.0
-damage_amount = 50.0
+damage_amount = 100.0
 mass = 27.0
 damage_area = Vector2(300, 20)
 required_xp_for_next = 450
@@ -257,13 +258,13 @@ region = Rect2(0, 504, 24, 24)
 atlas = ExtResource("8_4qpdp")
 region = Rect2(0, 96, 24, 24)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1bcnr"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_4y2ta"]
 atlas = ExtResource("17_w2ry6")
-region = Rect2(0, 48, 24, 24)
+region = Rect2(0, 24, 24, 24)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xcb0v"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ojiuh"]
 atlas = ExtResource("17_w2ry6")
-region = Rect2(24, 48, 24, 24)
+region = Rect2(24, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6rgum"]
 atlas = ExtResource("17_w2ry6")
@@ -381,14 +382,6 @@ region = Rect2(0, 24, 24, 24)
 atlas = ExtResource("8_4qpdp")
 region = Rect2(24, 24, 24, 24)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_4y2ta"]
-atlas = ExtResource("17_w2ry6")
-region = Rect2(0, 24, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ojiuh"]
-atlas = ExtResource("17_w2ry6")
-region = Rect2(24, 24, 24, 24)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_p0g0p"]
 atlas = ExtResource("8_4qpdp")
 region = Rect2(0, 288, 24, 24)
@@ -464,6 +457,10 @@ region = Rect2(0, 48, 24, 24)
 [sub_resource type="AtlasTexture" id="AtlasTexture_dlh1p"]
 atlas = ExtResource("17_w2ry6")
 region = Rect2(24, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1bcnr"]
+atlas = ExtResource("17_w2ry6")
+region = Rect2(72, 240, 24, 24)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_1464v"]
 animations = [{
@@ -590,22 +587,22 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_1bcnr")
+"texture": SubResource("AtlasTexture_4y2ta")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xcb0v")
+"texture": SubResource("AtlasTexture_ojiuh")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_1bcnr")
+"texture": SubResource("AtlasTexture_4y2ta")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xcb0v")
+"texture": SubResource("AtlasTexture_ojiuh")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_1bcnr")
+"texture": SubResource("AtlasTexture_4y2ta")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xcb0v")
+"texture": SubResource("AtlasTexture_ojiuh")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_6rgum")
@@ -619,8 +616,8 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_n0jy4")
 }],
-"loop": true,
-"name": &"final",
+"loop": false,
+"name": &"final_4",
 "speed": 5.0
 }, {
 "frames": [{
@@ -903,6 +900,14 @@ animations = [{
 "loop": false,
 "name": &"run_4",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1bcnr")
+}],
+"loop": true,
+"name": &"wait_mf_4",
+"speed": 5.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4hlwr"]
@@ -1070,10 +1075,17 @@ position = Vector2(336, 466)
 editor_draw_limits = true
 script = ExtResource("4_tccpi")
 
-[node name="Player" type="CharacterBody2D" parent="."]
+[node name="Black" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(257, 320)
+scale = Vector2(2000, 2000)
+texture = ExtResource("20_sane6")
+
+[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("black_img")]
 position = Vector2(190, 473)
 collision_layer = 2
 script = ExtResource("1_hym41")
+black_img = NodePath("../Black")
 player_datas = Array[ExtResource("2_70cc3")]([SubResource("Resource_25m8j"), SubResource("Resource_4qpdp"), SubResource("Resource_n31jq"), SubResource("Resource_w2ry6")])
 
 [node name="Root" type="Node2D" parent="Player"]
@@ -1109,8 +1121,7 @@ shape = SubResource("RectangleShape2D_1464v")
 material = SubResource("ShaderMaterial_ll1pc")
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_1464v")
-animation = &"roll_4"
-frame_progress = 1.0
+animation = &"idle_1"
 
 [node name="AutoJumpCast" type="RayCast2D" parent="Player/Root"]
 position = Vector2(0, 21)

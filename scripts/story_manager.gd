@@ -77,6 +77,11 @@ const level_4_text: Array[String] = [
 """If you still want to continue..."""
 ]
 
+const final_text: Array[String] = [
+"""Final""",
+"""NEEEYY""",
+]
+
 var locked: bool = false
 var dash_introduced: bool = false
 var can_steal: bool = false
@@ -118,3 +123,11 @@ func cookie_damage() -> void: can_steal = true; run_dialogue(cookie_damage_text)
 func level_down() -> void: run_dialogue(level_down_text)
 func level_3() -> void: run_dialogue(level_3_text)
 func level_4() -> void: run_dialogue(level_4_text)
+func final() -> void:
+	Global.player_manager.player.black_img.visible = true
+	lock_everything(true)
+	for text in final_text:
+		await Global.dialogue_manager.enable_dialogue(text)
+	Global.scene_manager.change_world_2d_scene("res://scenes/empty.tscn")
+	Global.stat_manager.xp_layer.queue_free()
+	Global.scene_manager.change_gui_scene("res://scenes/credits.tscn")

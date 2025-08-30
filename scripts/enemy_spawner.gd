@@ -51,6 +51,8 @@ func _process(delta: float) -> void:
 				Global.story_manager.cookie_damage()
 				Global.enemy_manager.spawner.reset(20)
 				Global.stat_manager.level_2_wait_for_killing_all = false
+			else:
+				reset(10)
 		return
 	if random_spawn_timer > 0.0:
 		random_spawn_timer -= delta

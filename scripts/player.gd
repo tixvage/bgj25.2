@@ -1,6 +1,8 @@
 extends CharacterBody2D
 class_name Player
 
+@export var black_img: Sprite2D
+
 @export var player_datas: Array[PlayerData]
 
 @export var ground_accel := 2500.0
@@ -113,20 +115,24 @@ func get_skinny():
 
 
 func get_fat():
-	Global.enemy_manager.lock = true
-	weight_change = true
-	shader_timer.stop()
-	shader_timer.start()
-	sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 1.0, 1.0, 1.0))
-	sprite.material.set_shader_parameter("flash_amount", 0.7)
-	next_data()
-	add_xp(0)
-	play_animation("change")
-	Global.audio_manager.create_audio(SoundEffect.Type.LEVEL_UP)
-	Global.stat_manager.level_up()
+	if not current_data == 3:
+		Global.enemy_manager.lock = true
+		weight_change = true
+		shader_timer.stop()
+		shader_timer.start()
+		sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 1.0, 1.0, 1.0))
+		sprite.material.set_shader_parameter("flash_amount", 0.7)
+		next_data()
+		add_xp(0)
+		play_animation("change")
+		Global.audio_manager.create_audio(SoundEffect.Type.LEVEL_UP)
+		Global.stat_manager.level_up()
+	else:
+		play_animation("final")
 
 
 func add_xp(amount: float) -> void:
+	if get_animation() in ["final", "change", "wait_mf"]: return
 	xp += amount
 	if current_data == 0:
 		xp = clamp(xp, 20, data.required_xp_for_next)
@@ -187,12 +193,15 @@ func stop_dash() -> void:
 
 func _process(delta: float) -> void:
 	if velocity.x != 0: root.scale.x = 1 if velocity.x > 0 else -1
+	var anim := get_animation()
+
+	if anim in ["final", "wait_mf"]:
+		return
 
 	if Global.story_manager.locked:
 		play_animation("idle")
 		return
 
-	var anim := get_animation()
 	if not anim in ["hit", "dash_end", "finger", "river", "change", "roll"]:
 		if is_dashing:
 			play_animation("dash_start")
@@ -206,7 +215,6 @@ func _process(delta: float) -> void:
 	hit_timer -= delta
 	hit_timer = maxf(0.0, hit_timer)
 	var can_hit := not locked and hit_timer == 0.0
-	print(can_hit)
 
 	var can_eat = not locked
 
@@ -261,6 +269,9 @@ func _physics_process(delta: float) -> void:
 
 	if not on_floor:
 		velocity += get_gravity() * delta
+
+	if anim in ["final"]:
+		return
 
 	if Global.story_manager.locked:
 		velocity.x = 0
@@ -351,6 +362,12 @@ func _on_ghost_spawn_timer_timeout() -> void:
 func _on_animated_sprite_2d_animation_finished() -> void:
 	var anim := get_animation()
 	#if anim in ["dash_end", "river", "finger"]:
+	if anim in ["wait_mf"]:
+		return
+	if anim in ["final"]:
+		Global.story_manager.final()
+		play_animation("wait_mf")
+		return
 	if not Global.story_manager.locked: locked = false
 	if anim in ["change"]:
 		add_xp(0)
