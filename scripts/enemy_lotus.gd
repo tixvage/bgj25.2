@@ -172,7 +172,7 @@ func _physics_process(delta: float) -> void:
 
 		velocity.x = global_position.direction_to(Vector2(target_x, global_position.y)).x * SPEED
 		if obstacle_ray.is_colliding() and is_on_floor():
-			velocity.y = -300
+			velocity.y = -400
 		if skipped_possible_jump and head_ray.is_colliding():
 			skipped_possible_jump = false
 		if optional_jump_ray.is_colliding() and is_on_floor() and not head_ray.is_colliding():
@@ -216,7 +216,7 @@ func _physics_process(delta: float) -> void:
 	elif state == State.RANDOM:
 		velocity.x = global_position.direction_to(Vector2(current_target_x, global_position.y)).x * SPEED
 		if obstacle_ray.is_colliding() and is_on_floor():
-			velocity.y = -300
+			velocity.y = -400
 		#worst shit
 		if skipped_possible_jump and head_ray.is_colliding():
 			skipped_possible_jump = false
@@ -256,11 +256,19 @@ func _on_flash_timer_timeout() -> void:
 	sprite.material.set_shader_parameter("line_scale", 0.0)
 
 
+func kill_if_not_already() -> void:
+	velocity.x = 0
+	$DeadArea/CollisionShape2D.disabled = false
+	$DashHurtArea/CollisionShape2D.disabled = true
+	change_state(State.WAIT_FOR_EAT)
+
+
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if sprite.animation == "die":
 		$DeadArea/CollisionShape2D.disabled = false
 		$DashHurtArea/CollisionShape2D.disabled = true
 		change_state(State.WAIT_FOR_EAT)
+		Global.stat_manager.new_kill()
 
 
 func _on_player_chase_area_area_entered(area: Area2D) -> void:

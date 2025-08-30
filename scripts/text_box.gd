@@ -1,4 +1,4 @@
-class_name DialogueBox extends MarginContainer
+class_name DialogueManager extends MarginContainer
 
 @onready var texture_node: TextureRect = $MarginContainer/HBoxContainer/Texture
 @onready var text_node: RichTextLabel = $MarginContainer/HBoxContainer/Text
@@ -12,6 +12,8 @@ var speed_ratio: float = 1.0
 var speeding_up: bool = false
 var text_running: bool = false
 
+signal current_text_finished
+
 const demo_string = """Demo message (Press 'X' to speed up then close):
 [color=#dddddd]Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident.[/color]
 """
@@ -22,11 +24,11 @@ func _speed_ratio() -> float:
 	return float(len(demo_string)) / float(len(text_node.text))
 
 func _ready() -> void:
+	Global.dialogue_manager = self
 	texture_minimum_size = texture_node.custom_minimum_size.x
 	enable_dialogue(tutorial_text)
 
-func enable_dialogue(text: String, texture: Texture2D = null) -> void:
-	if Global.player_manager.player: Global.player_manager.player.locked = true
+func enable_dialogue(text: String, texture: Texture2D = null) -> Signal:
 	speeding_up = false
 	visible = true
 	text_running = true
@@ -41,13 +43,15 @@ func enable_dialogue(text: String, texture: Texture2D = null) -> void:
 	texture_node.texture = texture
 
 	text_node.text = text
+	
+	return current_text_finished
 
 func disable_dialog() -> void:
-	Global.player_manager.player.locked = false
 	speeding_up = false
 	texture_node.texture = null
 	text_node.text = ""
 	visible = false
+	current_text_finished.emit()
 
 
 func _process(delta: float) -> void:

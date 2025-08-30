@@ -52,6 +52,7 @@ func next_data() -> void:
 	chocolate_amount = 0
 	sprite.material.set_shader_parameter("chocolate_amount", chocolate_amount)
 	current_data += 1
+	print(xp)
 
 
 func previous_data() -> void:
@@ -63,7 +64,7 @@ func previous_data() -> void:
 
 func _ready() -> void:
 	Global.player_manager.player = self
-	change_data(3)
+	change_data(0)
 	add_xp(50)
 	play_animation("idle")
 
@@ -121,9 +122,9 @@ func add_xp(amount: float) -> void:
 	xp += amount
 	xp = clamp(xp, 0.0, data.required_xp_for_next)
 	Global.stat_manager.update_xp(xp, data.required_xp_for_next)
-	if xp == data.required_xp_for_next:
+	if xp == data.required_xp_for_next and amount > 0:
 		get_fat()
-	elif xp == 0.0:
+	elif xp == 0.0 and amount < 0:
 		get_skinny()
 
 
@@ -175,6 +176,10 @@ func stop_dash() -> void:
 func _process(delta: float) -> void:
 	if velocity.x != 0: root.scale.x = 1 if velocity.x > 0 else -1
 
+	if Global.story_manager.locked:
+		play_animation("idle")
+		return
+
 	var anim := get_animation()
 	if not anim in ["hit", "dash_end", "finger", "river", "change", "roll"]:
 		if is_dashing:
@@ -217,6 +222,7 @@ func _process(delta: float) -> void:
 				var xp_gain: float = body.get_parent().eat()
 				play_animation(eat_animations[randi() % len(eat_animations)])
 				add_xp(xp_gain)
+				Global.stat_manager.new_eat()
 				break
 
 
@@ -232,16 +238,20 @@ func _physics_process(delta: float) -> void:
 						  or data.extra_fat
 	var can_move: bool = not is_dashing and not locked
 	var anim := get_animation()
-	var can_roll: bool = anim in ["roll"] and data.extra_fat
-
+	var can_roll: bool = anim in ["roll"] and not Global.story_manager.locked
 	var accel = ground_accel if on_floor else air_accel
 
 	if not on_floor:
 		velocity += get_gravity() * delta
 
+	if Global.story_manager.locked:
+		velocity.x = 0
+		return
+
 	if Input.is_action_just_pressed("move_down") and can_dash:
 		if data.extra_fat:
-			play_animation("roll")
+			if not Global.story_manager.locked:
+				play_animation("roll")
 		else:
 			start_dash()
 
@@ -298,6 +308,15 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
+func lock() -> void:
+	sprite.stop()
+	play_animation("idle")
+	locked = true
+
+func unlock() -> void:
+	locked = false
+
+
 func _on_ghost_spawn_timer_timeout() -> void:
 	return
 	var ghost_instance = player_ghost_scene.instantiate()
@@ -308,7 +327,7 @@ func _on_ghost_spawn_timer_timeout() -> void:
 func _on_animated_sprite_2d_animation_finished() -> void:
 	var anim := get_animation()
 	#if anim in ["dash_end", "river", "finger"]:
-	locked = false
+	if not Global.story_manager.locked: locked = false
 	if anim in ["change"]:
 		add_xp(0)
 	if anim in ["hit", "dash_end", "river", "finger", "change", "roll"]:

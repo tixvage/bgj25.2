@@ -9,6 +9,8 @@ var player_manager: PlayerManager
 var particle_manager: ParticleManager
 var projectile_manager: ProjectileManager
 var stat_manager: StatManager
+var story_manager: StoryManager
+var dialogue_manager: DialogueManager
 var world_viewport: SubViewportContainer
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 const EPS: float = 3.0

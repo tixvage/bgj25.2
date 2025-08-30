@@ -1057,7 +1057,11 @@ spawn_points = NodePath("../EnemySpawnPoints")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(336, 200)
+position = Vector2(336, 466)
+limit_left = -358
+limit_right = 1082
+limit_smoothed = true
+editor_draw_limits = true
 script = ExtResource("4_tccpi")
 
 [node name="Player" type="CharacterBody2D" parent="."]
@@ -1137,6 +1141,8 @@ shape = SubResource("RectangleShape2D_4qpdp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/RollArea"]
 shape = SubResource("RectangleShape2D_p0g0p")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 
 [connection signal="animation_changed" from="Player/Root/AnimatedSprite2D" to="Player" method="_on_animated_sprite_2d_animation_changed"]
 [connection signal="animation_finished" from="Player/Root/AnimatedSprite2D" to="Player" method="_on_animated_sprite_2d_animation_finished"]

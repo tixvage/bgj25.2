@@ -7,9 +7,15 @@ var spawner: EnemySpawner
 
 var lock: bool = false
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
 	Global.enemy_manager = self
+
+
+func kill_all() -> void:
+	var enemies := spawner.pool.get_children()
+	for enemy in enemies:
+		enemy.kill_if_not_already()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
