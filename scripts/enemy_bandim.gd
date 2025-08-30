@@ -83,6 +83,10 @@ func eat() -> float:
 	return data.xp_gain
 
 
+func get_health_ratio() -> float:
+	return health / MAX_HEALTH
+
+
 func damage(amount: float, up: bool) -> void:
 	health -= amount
 	if health <= 0:
@@ -243,7 +247,10 @@ func _physics_process(delta: float) -> void:
 
 func _on_flash_timer_timeout() -> void:
 	sprite.material.set_shader_parameter("flash_amount", 0.0)
-	sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 1.0, 1.0, 1.0))
+	var weight := 1 - get_health_ratio()
+	var white := Vector4.ONE
+	var red := Vector4(1, 0, 0, 1)
+	sprite.material.set_shader_parameter("flash_light", white.lerp(red, weight))
 	sprite.material.set_shader_parameter("line_scale", 0.0)
 
 

@@ -246,6 +246,7 @@ func _physics_process(delta: float) -> void:
 
 	if Global.story_manager.locked:
 		velocity.x = 0
+		move_and_slide()
 		return
 
 	if Input.is_action_just_pressed("move_down") and can_dash:

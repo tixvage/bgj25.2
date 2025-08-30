@@ -18,15 +18,16 @@ const demo_string = """Demo message (Press 'X' to speed up then close):
 [color=#dddddd]Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident.[/color]
 """
 
-const tutorial_text = """test dialogue"""
 
 func _speed_ratio() -> float:
 	return float(len(demo_string)) / float(len(text_node.text))
 
+
 func _ready() -> void:
 	Global.dialogue_manager = self
 	texture_minimum_size = texture_node.custom_minimum_size.x
-	enable_dialogue(tutorial_text)
+	disable_dialog()
+
 
 func enable_dialogue(text: String, texture: Texture2D = null) -> Signal:
 	speeding_up = false
@@ -45,6 +46,7 @@ func enable_dialogue(text: String, texture: Texture2D = null) -> Signal:
 	text_node.text = text
 	
 	return current_text_finished
+
 
 func disable_dialog() -> void:
 	speeding_up = false
