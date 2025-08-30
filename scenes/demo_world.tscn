@@ -1067,9 +1067,6 @@ spawn_points = NodePath("../EnemySpawnPoints")
 [node name="Camera2D" type="Camera2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(336, 466)
-limit_left = -358
-limit_right = 1082
-limit_smoothed = true
 editor_draw_limits = true
 script = ExtResource("4_tccpi")
 

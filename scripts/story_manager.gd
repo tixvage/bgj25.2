@@ -24,13 +24,13 @@ const first_eat_text: Array[String] = [
 const early_dash_text: Array[String] = [
 """Hmmm.""",
 """You seem to be in a bit of a hurry...""",
-"""I was going to teach you how to 'dash' anyway.""",
-"""Anyway, you need to press 'S' or 'Down' key when you have enough height for the dash""",
+"""I was going to teach you how to 'dive' anyway.""",
+"""Anyway, you need to press 'S' or 'Down' key when you have enough height for the dive""",
 ]
 
 const introduce_dash_text: Array[String] = [
 """Seems like you're having a hard time hitting one cookie with each punch.""",
-"""After jumping, try pressing 'S' or 'Down' and dash"""
+"""After jumping, try pressing 'S' or 'Down' for diving"""
 ]
 
 const info_about_cookies_text: Array[String] = [

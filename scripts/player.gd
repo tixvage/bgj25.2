@@ -12,7 +12,7 @@ const DASH_LIMIT: float = 150.0
 const SHAKE_FORCE: float = 1.0
 const WEIGHT_ANIM_MAX: int = 12
 const ROLL_PARTICLE_TIME: float = 0.02
-
+const HIT_TIME: float = 0.5
 
 @onready var shader_timer: Timer = $ShaderTimer
 @onready var dash_ray: RayCast2D = $DashRay
@@ -43,6 +43,7 @@ var weight_change: bool = false
 var weight_anim_count: int = 0
 var chocolate_amount: float = 0.0
 var roll_particle_timer: float = 0.0
+var hit_timer: float = 0.0
 
 var data: PlayerData : get = get_current_data 
 
@@ -202,10 +203,15 @@ func _process(delta: float) -> void:
 		else:
 			play_animation("run")
 
-	var can_hit = not locked
+	hit_timer -= delta
+	hit_timer = maxf(0.0, hit_timer)
+	var can_hit := not locked and hit_timer == 0.0
+	print(can_hit)
+
 	var can_eat = not locked
 
 	if Input.is_action_just_pressed("fire") and can_hit:
+		hit_timer = HIT_TIME
 		play_animation("hit")
 		if data.extra_fat:
 			chocolate_amount = 0
@@ -358,6 +364,9 @@ func _on_animated_sprite_2d_animation_changed() -> void:
 		locked = true
 	if anim in ["hit", "roll"] and data.extra_fat:
 		locked = true
+	#im gonna cs
+	if Global.story_manager.locked: locked = true
+
 
 
 func _on_shader_timer_timeout() -> void:
@@ -371,7 +380,7 @@ func _on_shader_timer_timeout() -> void:
 		if weight_anim_count == WEIGHT_ANIM_MAX:
 			weight_anim_count = 0
 			weight_change = false
-			Global.enemy_manager.lock = false
+			if not Global.story_manager.locked: Global.enemy_manager.lock = false
 	else:
 		sprite.material.set_shader_parameter("flash_amount", 0.0)
 		sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 1.0, 1.0, 1.0))

@@ -18,6 +18,7 @@ func shake(strength: float, speed: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	var player_with_x = Vector2(Global.player_manager.player.global_position.x, camera.global_position.y)
+	player_with_x.x = clampf(player_with_x.x, -115.0, 840.0)
 	actual_cam_pos = actual_cam_pos.lerp(player_with_x, delta * 3)
 	var cam_subpixel_offset: Vector2 = actual_cam_pos.round() - actual_cam_pos
 	var cam_diff_offset: Vector2 = camera.offset.round() - camera.offset
