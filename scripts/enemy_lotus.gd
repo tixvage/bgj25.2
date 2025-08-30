@@ -162,7 +162,9 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	if Global.enemy_manager.lock: return
+	if Global.enemy_manager.lock:
+		move_and_slide()
+		return
 
 	if state == State.CHASE:
 		var player_position: Vector2 = Global.player_manager.player.global_position

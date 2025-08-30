@@ -17,6 +17,7 @@ var random_spawn_timer: float = 0.0
 var max_count: int = 5
 var count: int = 0
 
+signal finished
 
 func get_random_spawn_position_type(type: Type) -> Vector2:
 	var children = spawn_points.get_node(Type.keys()[type]).get_children()
@@ -44,7 +45,13 @@ func reset(new_max_count: int) -> void:
 
 
 func _process(delta: float) -> void:
-	if not count < max_count: return
+	if not count < max_count:
+		if pool.get_child_count() == 0:
+			if Global.stat_manager.level_2_wait_for_killing_all:
+				Global.story_manager.cookie_damage()
+				Global.enemy_manager.spawner.reset(20)
+				Global.stat_manager.level_2_wait_for_killing_all = false
+		return
 	if random_spawn_timer > 0.0:
 		random_spawn_timer -= delta
 	else:

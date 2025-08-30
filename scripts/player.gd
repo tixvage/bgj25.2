@@ -84,7 +84,7 @@ func change_data(new_data: int) -> void:
 
 
 func damage(xp_steal: float, projectile: bool = false) -> void:
-	add_xp(-xp_steal)
+	if Global.story_manager.can_steal: add_xp(-xp_steal)
 	var anim := get_animation()
 	shader_timer.start()
 	if projectile and anim != "dash_end":

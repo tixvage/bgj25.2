@@ -8,6 +8,7 @@ var total_eat: int = 0
 var dashed: bool = false
 var first_level_up: bool = false
 var level_2_first_kill: bool = false
+var level_2_wait_for_killing_all: bool = false
 
 func _ready() -> void:
 	Global.stat_manager = self
@@ -21,7 +22,8 @@ func level_up() -> void:
 	if not first_level_up:
 		Global.story_manager.level_up()
 		Global.enemy_manager.spawner.reset(10)
-	first_level_up = true
+		first_level_up = true
+		level_2_wait_for_killing_all = true
 
 
 func dash() -> void:

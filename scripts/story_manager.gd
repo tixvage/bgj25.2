@@ -49,9 +49,18 @@ const level_2_skills_text: Array[String] = [
 """But your punches and dash damage are stronger.""",
 ]
 
+const cookie_damage_text: Array[String] = [
+"""I have bad news.""",
+"""Now, when cookies hit you, it means they are stealing cookies from you.""",
+"""If they steal enough cookies from you will return to the previous level.""",
+"""By the way, the cookies might be acting a little silly.""",
+"""After all, they are cookies, aren't they? It's not fair to blame the person who made the game...""",
+]
+
 
 var locked: bool = false
 var dash_introduced: bool = false
+var can_steal: bool = false
 
 func _ready() -> void:
 	Global.story_manager = self
@@ -86,3 +95,4 @@ func introduce_dash() -> void: dash_introduced = true; run_dialogue(introduce_da
 func info_about_cookies() -> void: run_dialogue(info_about_cookies_text)
 func level_up() -> void: run_dialogue(level_up_text)
 func level_2_skills() -> void: run_dialogue(level_2_skills_text)
+func cookie_damage() -> void: can_steal = true; run_dialogue(cookie_damage_text)
