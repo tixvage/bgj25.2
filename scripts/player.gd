@@ -308,7 +308,7 @@ func _physics_process(delta: float) -> void:
 			roll_particle_timer = ROLL_PARTICLE_TIME
 
 	var direction := Input.get_axis("move_left", "move_right") if can_move else 0.0
-	if direction:
+	if direction and on_floor:
 		Global.audio_manager.create_audio(SoundEffect.Type.WALK)
 
 	var possible_jump_object := auto_jump_cast.get_collider()
