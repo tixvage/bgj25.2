@@ -14,6 +14,9 @@ var enemy_dict: Dictionary[Type, Resource] = {}
 var random_spawn_time: float = 2.0
 var random_spawn_timer: float = 0.0
 
+var max_count: int = 5
+var count: int = 0
+
 
 func get_random_spawn_position_type(type: Type) -> Vector2:
 	var children = spawn_points.get_node(Type.keys()[type]).get_children()
@@ -33,9 +36,18 @@ func _ready() -> void:
 		enemy_dict[temp.data.type] = enemy
 		temp.queue_free()
 
+
+func reset(new_max_count: int) -> void:
+	random_spawn_timer = random_spawn_time
+	count = 0
+	max_count = new_max_count
+
+
 func _process(delta: float) -> void:
+	if not count < max_count: return
 	if random_spawn_timer > 0.0:
 		random_spawn_timer -= delta
 	else:
 		random_spawn_timer = random_spawn_time
+		count += 1
 		spawn_enemy_type(Global.rng.randi() % 2)

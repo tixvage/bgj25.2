@@ -67,6 +67,7 @@ func _ready() -> void:
 	change_data(0)
 	add_xp(50)
 	play_animation("idle")
+	Global.story_manager.spawn()
 
 
 func get_animation() -> String:
@@ -115,7 +116,9 @@ func get_fat():
 	sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 1.0, 1.0, 1.0))
 	sprite.material.set_shader_parameter("flash_amount", 0.7)
 	next_data()
+	add_xp(0)
 	play_animation("change")
+	Global.stat_manager.level_up()
 
 
 func add_xp(amount: float) -> void:
@@ -171,6 +174,8 @@ func stop_dash() -> void:
 			if nearness != 0.5:
 				var raw_nearness: float = nearness if position.x < body.global_position.x else -nearness
 				body.get_parent().damage_from_up(raw_nearness, data.mass)
+	
+	Global.stat_manager.dash()
 
 
 func _process(delta: float) -> void:
