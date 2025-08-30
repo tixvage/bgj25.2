@@ -7,8 +7,11 @@ var total_kill: int = 0
 var total_eat: int = 0
 var dashed: bool = false
 var first_level_up: bool = false
+var first_level_down: bool = false
 var level_2_first_kill: bool = false
 var level_2_wait_for_killing_all: bool = false
+var first_level_3: bool = false
+var first_level_4: bool = false
 
 func _ready() -> void:
 	Global.stat_manager = self
@@ -24,7 +27,25 @@ func level_up() -> void:
 		Global.enemy_manager.spawner.reset(10)
 		first_level_up = true
 		level_2_wait_for_killing_all = true
+	else:
+		Global.enemy_manager.spawner.reset(20)
+	
+	if Global.player_manager.player.current_data == 2 and not first_level_3:
+		first_level_3 = true
+		Global.story_manager.level_3()
+	elif Global.player_manager.player.current_data == 3 and not first_level_4:
+		first_level_4 = true
+		Global.enemy_manager.spawner.reset(30)
+		Global.story_manager.level_4()
 
+
+func level_down() -> void:
+	if not first_level_down:
+		Global.story_manager.level_down()
+		Global.enemy_manager.spawner.reset(20)
+		first_level_down = true
+	else:
+		Global.enemy_manager.spawner.reset(15)
 
 func dash() -> void:
 	if not dashed:

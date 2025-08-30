@@ -52,14 +52,13 @@ func next_data() -> void:
 	chocolate_amount = 0
 	sprite.material.set_shader_parameter("chocolate_amount", chocolate_amount)
 	current_data += 1
-	print(xp)
 
 
 func previous_data() -> void:
 	chocolate_amount = 0
 	sprite.material.set_shader_parameter("chocolate_amount", chocolate_amount)
 	current_data -= 1
-	xp = data.required_xp_for_next - 20
+	xp = data.required_xp_for_next - 40
 
 
 func _ready() -> void:
@@ -84,7 +83,8 @@ func change_data(new_data: int) -> void:
 
 
 func damage(xp_steal: float, projectile: bool = false) -> void:
-	if Global.story_manager.can_steal: add_xp(-xp_steal)
+	if Global.story_manager.can_steal:
+		add_xp(-xp_steal * (1 if Global.stat_manager.first_level_down else 5))
 	var anim := get_animation()
 	shader_timer.start()
 	if projectile and anim != "dash_end":
@@ -105,7 +105,9 @@ func get_skinny():
 	sprite.material.set_shader_parameter("flash_light", Vector4(1.0, 1.0, 1.0, 1.0))
 	sprite.material.set_shader_parameter("flash_amount", 0.7)
 	previous_data()
+	add_xp(0)
 	play_animation("change")
+	Global.stat_manager.level_down()
 
 
 func get_fat():
@@ -123,6 +125,8 @@ func get_fat():
 
 func add_xp(amount: float) -> void:
 	xp += amount
+	if current_data == 0:
+		xp = clamp(xp, 20, data.required_xp_for_next)
 	xp = clamp(xp, 0.0, data.required_xp_for_next)
 	Global.stat_manager.update_xp(xp, data.required_xp_for_next)
 	if xp == data.required_xp_for_next and amount > 0:

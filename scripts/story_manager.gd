@@ -52,11 +52,30 @@ const level_2_skills_text: Array[String] = [
 const cookie_damage_text: Array[String] = [
 """I have bad news.""",
 """Now, when cookies hit you, it means they are stealing cookies from you.""",
-"""If they steal enough cookies from you will return to the previous level.""",
+"""If they steal enough cookies, you will return to the previous level.""",
 """By the way, the cookies might be acting a little silly.""",
 """After all, they are cookies, aren't they? It's not fair to blame the person who made the game...""",
 ]
 
+const level_down_text: Array[String] = [
+"""Hello again, skinny man.""",
+"""Keep in mind that it makes more sense to start eating after killing every cookie you see.""",
+"""I'll leave you alone for a bit. See you after you eat some cookies.""",
+"""..."""
+]
+
+const level_3_text: Array[String] = [
+"""Wooow, you looking strong!""",
+"""I guess you still want to eat some more cookies.""",
+]
+
+const level_4_text: Array[String] = [
+"""Uhhh, things got a little out of hand...""",
+"""I think you ate too many cookies.""",
+"""You're no longer able to jump...""",
+"""You can roll by pressing 'S' or 'Down' instead.""",
+"""If you still want to continue..."""
+]
 
 var locked: bool = false
 var dash_introduced: bool = false
@@ -96,3 +115,6 @@ func info_about_cookies() -> void: run_dialogue(info_about_cookies_text)
 func level_up() -> void: run_dialogue(level_up_text)
 func level_2_skills() -> void: run_dialogue(level_2_skills_text)
 func cookie_damage() -> void: can_steal = true; run_dialogue(cookie_damage_text)
+func level_down() -> void: run_dialogue(level_down_text)
+func level_3() -> void: run_dialogue(level_3_text)
+func level_4() -> void: run_dialogue(level_4_text)

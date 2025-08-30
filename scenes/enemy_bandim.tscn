@@ -9,7 +9,7 @@
 script = ExtResource("2_78ggm")
 type = 1
 xp_gain = 20
-xp_steal = 10.0
+xp_steal = 3.0
 metadata/_custom_type_script = "uid://cper3rsha37eo"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nq4ng"]
