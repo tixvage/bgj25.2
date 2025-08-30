@@ -107,6 +107,7 @@ func get_skinny():
 	previous_data()
 	add_xp(0)
 	play_animation("change")
+	Global.audio_manager.create_audio(SoundEffect.Type.LEVEL_DOWN)
 	Global.stat_manager.level_down()
 
 
@@ -120,6 +121,7 @@ func get_fat():
 	next_data()
 	add_xp(0)
 	play_animation("change")
+	Global.audio_manager.create_audio(SoundEffect.Type.LEVEL_UP)
 	Global.stat_manager.level_up()
 
 
@@ -277,6 +279,7 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("move_up") and can_jump:
 		velocity.y = -data.jump_force
+		Global.audio_manager.create_audio(SoundEffect.Type.JUMP)
 
 	if can_roll:
 		var bodies := roll_area.get_overlapping_bodies()

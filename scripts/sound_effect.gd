@@ -8,6 +8,12 @@ enum Type {
 	HIT,
 	HIT_ENEMY,
 	MISS,
+	SHOOT_START,
+	SHOOT_HIT,
+	LEVEL_UP,
+	LEVEL_DOWN,
+	JUMP,
+	TALKBOX,
 }
 
 @export_range(0, 10) var limit: int = 5

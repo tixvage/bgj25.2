@@ -22,5 +22,6 @@ func _on_area_entered(area: Area2D) -> void:
 	if not area.is_in_group("Player"): return
 
 	area.get_parent().damage(data.xp_steal, true)
+	Global.audio_manager.create_audio(SoundEffect.Type.SHOOT_HIT)
 
 	queue_free()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://c8q2wjwagov8h"]
+[gd_scene load_steps=41 format=3 uid="uid://c8q2wjwagov8h"]
 
 [ext_resource type="Script" uid="uid://cil73ed5tu74" path="res://scripts/scene_manager.gd" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://dy8vpfa4appfu" path="res://scripts/audio_manager.gd" id="2_0wfyh"]
@@ -13,7 +13,13 @@
 [ext_resource type="Shader" uid="uid://dmt0xf6ywpk70" path="res://shaders/subpixel.gdshader" id="7_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://h0ndhqd3d6fy" path="res://scenes/dialogue_layer.tscn" id="7_tipki"]
 [ext_resource type="Script" uid="uid://cfab6f6jqnxnv" path="res://scripts/player_manager.gd" id="8_choun"]
+[ext_resource type="AudioStream" uid="uid://ce6tf43wkrxr0" path="res://assets/sound/shoot_start.mp3" id="8_jscy8"]
+[ext_resource type="AudioStream" uid="uid://c17qbfwm1unee" path="res://assets/sound/shoot_hit.mp3" id="9_pm3ni"]
 [ext_resource type="Script" uid="uid://vj0vjbu8pq5r" path="res://scripts/particle_manager.gd" id="9_ya4ey"]
+[ext_resource type="AudioStream" uid="uid://by8vqaiorvu5b" path="res://assets/sound/level_up.mp3" id="10_y6deb"]
+[ext_resource type="AudioStream" uid="uid://cibydanysuynn" path="res://assets/sound/level_down.mp3" id="11_og1vs"]
+[ext_resource type="AudioStream" uid="uid://cru8useukhxeu" path="res://assets/sound/jump.mp3" id="12_og1vs"]
+[ext_resource type="AudioStream" uid="uid://dc2gq2rgmiqvf" path="res://assets/sound/a.mp3" id="13_2wyq8"]
 [ext_resource type="Script" uid="uid://di3bbgxr1nblb" path="res://scripts/stat_manager.gd" id="13_jbj1t"]
 [ext_resource type="PackedScene" uid="uid://cl7nm38kki82n" path="res://scenes/xp_layer.tscn" id="14_jkv2x"]
 [ext_resource type="Script" uid="uid://bxfygrl2at6dk" path="res://scripts/projectile_manager.gd" id="14_muem4"]
@@ -81,6 +87,66 @@ pitch_scale = 1.0
 pitch_randomness = 0.0
 metadata/_custom_type_script = "uid://d5tjmlelqgaf"
 
+[sub_resource type="Resource" id="Resource_y6deb"]
+script = ExtResource("3_sugp2")
+limit = 5
+type = 6
+sound_effect = ExtResource("8_jscy8")
+volume = 0
+pitch_scale = 1.0
+pitch_randomness = 0.0
+metadata/_custom_type_script = "uid://d5tjmlelqgaf"
+
+[sub_resource type="Resource" id="Resource_og1vs"]
+script = ExtResource("3_sugp2")
+limit = 5
+type = 7
+sound_effect = ExtResource("9_pm3ni")
+volume = 0
+pitch_scale = 1.0
+pitch_randomness = 0.0
+metadata/_custom_type_script = "uid://d5tjmlelqgaf"
+
+[sub_resource type="Resource" id="Resource_jscy8"]
+script = ExtResource("3_sugp2")
+limit = 5
+type = 8
+sound_effect = ExtResource("10_y6deb")
+volume = 0
+pitch_scale = 1.0
+pitch_randomness = 0.0
+metadata/_custom_type_script = "uid://d5tjmlelqgaf"
+
+[sub_resource type="Resource" id="Resource_2wyq8"]
+script = ExtResource("3_sugp2")
+limit = 5
+type = 9
+sound_effect = ExtResource("11_og1vs")
+volume = 0
+pitch_scale = 1.0
+pitch_randomness = 0.0
+metadata/_custom_type_script = "uid://d5tjmlelqgaf"
+
+[sub_resource type="Resource" id="Resource_vxglm"]
+script = ExtResource("3_sugp2")
+limit = 5
+type = 10
+sound_effect = ExtResource("12_og1vs")
+volume = 0
+pitch_scale = 1.0
+pitch_randomness = 0.0
+metadata/_custom_type_script = "uid://d5tjmlelqgaf"
+
+[sub_resource type="Resource" id="Resource_2f3dj"]
+script = ExtResource("3_sugp2")
+limit = 1
+type = 11
+sound_effect = ExtResource("13_2wyq8")
+volume = 0
+pitch_scale = 1.8
+pitch_randomness = 0.1
+metadata/_custom_type_script = "uid://d5tjmlelqgaf"
+
 [sub_resource type="Resource" id="Resource_yc10j"]
 script = ExtResource("15_0ld40")
 scene = ExtResource("16_gqmmt")
@@ -98,7 +164,7 @@ script = ExtResource("1_o5qli")
 
 [node name="AudioManager" type="Node" parent="."]
 script = ExtResource("2_0wfyh")
-sound_effects = Array[ExtResource("3_sugp2")]([SubResource("Resource_jyhfs"), SubResource("Resource_ya4ey"), SubResource("Resource_a8y0u"), SubResource("Resource_jkv2x"), SubResource("Resource_jbj1t"), SubResource("Resource_muem4")])
+sound_effects = Array[ExtResource("3_sugp2")]([SubResource("Resource_jyhfs"), SubResource("Resource_ya4ey"), SubResource("Resource_a8y0u"), SubResource("Resource_jkv2x"), SubResource("Resource_jbj1t"), SubResource("Resource_muem4"), SubResource("Resource_y6deb"), SubResource("Resource_og1vs"), SubResource("Resource_jscy8"), SubResource("Resource_2wyq8"), SubResource("Resource_vxglm"), SubResource("Resource_2f3dj")])
 
 [node name="WindowManager" type="Node" parent="."]
 script = ExtResource("5_tbgi4")

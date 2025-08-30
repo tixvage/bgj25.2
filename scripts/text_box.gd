@@ -64,6 +64,7 @@ func _process(delta: float) -> void:
 			disable_dialog()
 	var speed = SKIP_SPEED if speeding_up else DEFAULT_SPEED
 	if text_running:
+		Global.audio_manager.create_audio(SoundEffect.Type.TALKBOX)
 		text_node.visible_ratio += delta * speed * _speed_ratio()
 		if text_node.visible_ratio >= 1.0:
 			text_running = false
