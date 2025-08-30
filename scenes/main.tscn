@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://c8q2wjwagov8h"]
+[gd_scene load_steps=47 format=3 uid="uid://c8q2wjwagov8h"]
 
 [ext_resource type="Script" uid="uid://cil73ed5tu74" path="res://scripts/scene_manager.gd" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://dy8vpfa4appfu" path="res://scripts/audio_manager.gd" id="2_0wfyh"]
@@ -23,7 +23,10 @@
 [ext_resource type="Script" uid="uid://di3bbgxr1nblb" path="res://scripts/stat_manager.gd" id="13_jbj1t"]
 [ext_resource type="PackedScene" uid="uid://cl7nm38kki82n" path="res://scenes/xp_layer.tscn" id="14_jkv2x"]
 [ext_resource type="Script" uid="uid://bxfygrl2at6dk" path="res://scripts/projectile_manager.gd" id="14_muem4"]
+[ext_resource type="AudioStream" uid="uid://caj3jrh7auhxy" path="res://assets/sound/walk.mp3" id="14_vxglm"]
 [ext_resource type="Script" uid="uid://dtkfhkhrr07r6" path="res://scripts/projectile.gd" id="15_0ld40"]
+[ext_resource type="AudioStream" uid="uid://cewfuo0ndrgrj" path="res://assets/sound/break.mp3" id="15_yq6so"]
+[ext_resource type="AudioStream" uid="uid://bxj74iv31hl85" path="res://assets/sound/eat.mp3" id="16_fv21b"]
 [ext_resource type="PackedScene" uid="uid://dthdklvf1d3kn" path="res://scenes/bandim_projectile.tscn" id="16_gqmmt"]
 [ext_resource type="Script" uid="uid://l0pop8d7w0mg" path="res://scripts/story_manager.gd" id="17_gqmmt"]
 
@@ -147,6 +150,36 @@ pitch_scale = 1.8
 pitch_randomness = 0.1
 metadata/_custom_type_script = "uid://d5tjmlelqgaf"
 
+[sub_resource type="Resource" id="Resource_yq6so"]
+script = ExtResource("3_sugp2")
+limit = 1
+type = 12
+sound_effect = ExtResource("14_vxglm")
+volume = -15
+pitch_scale = 2.0
+pitch_randomness = 0.0
+metadata/_custom_type_script = "uid://d5tjmlelqgaf"
+
+[sub_resource type="Resource" id="Resource_fv21b"]
+script = ExtResource("3_sugp2")
+limit = 5
+type = 13
+sound_effect = ExtResource("15_yq6so")
+volume = 0
+pitch_scale = 1.0
+pitch_randomness = 0.0
+metadata/_custom_type_script = "uid://d5tjmlelqgaf"
+
+[sub_resource type="Resource" id="Resource_tel4y"]
+script = ExtResource("3_sugp2")
+limit = 5
+type = 14
+sound_effect = ExtResource("16_fv21b")
+volume = 0
+pitch_scale = 1.71
+pitch_randomness = 0.0
+metadata/_custom_type_script = "uid://d5tjmlelqgaf"
+
 [sub_resource type="Resource" id="Resource_yc10j"]
 script = ExtResource("15_0ld40")
 scene = ExtResource("16_gqmmt")
@@ -164,7 +197,7 @@ script = ExtResource("1_o5qli")
 
 [node name="AudioManager" type="Node" parent="."]
 script = ExtResource("2_0wfyh")
-sound_effects = Array[ExtResource("3_sugp2")]([SubResource("Resource_jyhfs"), SubResource("Resource_ya4ey"), SubResource("Resource_a8y0u"), SubResource("Resource_jkv2x"), SubResource("Resource_jbj1t"), SubResource("Resource_muem4"), SubResource("Resource_y6deb"), SubResource("Resource_og1vs"), SubResource("Resource_jscy8"), SubResource("Resource_2wyq8"), SubResource("Resource_vxglm"), SubResource("Resource_2f3dj")])
+sound_effects = Array[ExtResource("3_sugp2")]([SubResource("Resource_jyhfs"), SubResource("Resource_ya4ey"), SubResource("Resource_a8y0u"), SubResource("Resource_jkv2x"), SubResource("Resource_jbj1t"), SubResource("Resource_muem4"), SubResource("Resource_y6deb"), SubResource("Resource_og1vs"), SubResource("Resource_jscy8"), SubResource("Resource_2wyq8"), SubResource("Resource_vxglm"), SubResource("Resource_2f3dj"), SubResource("Resource_yq6so"), SubResource("Resource_fv21b"), SubResource("Resource_tel4y")])
 
 [node name="WindowManager" type="Node" parent="."]
 script = ExtResource("5_tbgi4")

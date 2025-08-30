@@ -234,6 +234,7 @@ func _process(delta: float) -> void:
 				play_animation(eat_animations[randi() % len(eat_animations)])
 				add_xp(xp_gain)
 				Global.stat_manager.new_eat()
+				Global.audio_manager.create_audio(SoundEffect.Type.EAT)
 				break
 
 
@@ -292,11 +293,13 @@ func _physics_process(delta: float) -> void:
 				jar_collision.disabled = true
 				jar_sprite.play("crack")
 				jar_sprite.animation_finished.connect(body.queue_free)
+				Global.audio_manager.create_audio(SoundEffect.Type.BREAK)
 				break
 		var areas := roll_area.get_overlapping_areas()
 		for area in areas:
 			if area.is_in_group("EnemyDash"):
 				area.get_parent().damage_from_up(sign(area.global_position.x - global_position.x) * 0.3, data.mass, data.damage_amount)
+				Global.audio_manager.create_audio(SoundEffect.Type.HIT)
 
 		velocity.x = 300.0 * root.scale.x
 		roll_particle_timer -= delta
@@ -305,6 +308,8 @@ func _physics_process(delta: float) -> void:
 			roll_particle_timer = ROLL_PARTICLE_TIME
 
 	var direction := Input.get_axis("move_left", "move_right") if can_move else 0.0
+	if direction:
+		Global.audio_manager.create_audio(SoundEffect.Type.WALK)
 
 	var possible_jump_object := auto_jump_cast.get_collider()
 	if possible_jump_object and possible_jump_object.is_in_group("Ground") and (direction != 0.0 or can_roll):

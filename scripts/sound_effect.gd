@@ -14,6 +14,9 @@ enum Type {
 	LEVEL_DOWN,
 	JUMP,
 	TALKBOX,
+	WALK,
+	BREAK,
+	EAT,
 }
 
 @export_range(0, 10) var limit: int = 5
