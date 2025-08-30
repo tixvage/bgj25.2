@@ -208,7 +208,6 @@ func _process(delta: float) -> void:
 					body.get_parent().damage_hand(global_position, data.damage_amount)
 					Global.audio_manager.create_audio(SoundEffect.Type.HIT)
 					break
-			
 
 	if Input.is_action_just_pressed("eat") and can_eat:
 		var eat_animations := ["river", "finger"]
@@ -236,10 +235,6 @@ func _physics_process(delta: float) -> void:
 	var can_roll: bool = anim in ["roll"] and data.extra_fat
 
 	var accel = ground_accel if on_floor else air_accel
-
-	var possible_jump_object := auto_jump_cast.get_collider()
-	if possible_jump_object and possible_jump_object.is_in_group("Ground"):
-		velocity.y = -100
 
 	if not on_floor:
 		velocity += get_gravity() * delta
@@ -287,6 +282,11 @@ func _physics_process(delta: float) -> void:
 			roll_particle_timer = ROLL_PARTICLE_TIME
 
 	var direction := Input.get_axis("move_left", "move_right") if can_move else 0.0
+
+	var possible_jump_object := auto_jump_cast.get_collider()
+	if possible_jump_object and possible_jump_object.is_in_group("Ground") and (direction != 0.0 or can_roll):
+		velocity.y = -120
+
 	move_particle.emitting = velocity.x != 0.0 and on_floor
 	var velocity_sign_old := signf(velocity.x)
 	velocity.x = move_toward(velocity.x, direction * data.move_speed, accel * delta)
